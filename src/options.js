@@ -1,4 +1,18 @@
+const DEFAULT_RULES = [
+    { 'mime': 'image/.+', 'pattern': 'images/'},
+    { 'mime': 'application/x-bittorrent', 'pattern': 'torrents/'}
+];
+
+if (localStorage.getItem('rulesets') === null) {
+    resetRules();
+}
+
 var rulesets = JSON.parse(localStorage.getItem('rulesets')) || [];
+
+function resetRules() {
+    localStorage.setItem('rulesets', JSON.stringify(DEFAULT_RULES));
+    rulesets = JSON.parse(localStorage.getItem('rulesets'));
+}
 
 function renderRules(openIdx) {
     var $rulesContainer = $('#rules-container');
@@ -72,6 +86,11 @@ $(function () {
         renderRules();
     });
 
+    $('#reset-rules-btn').click(function () {
+        // TODO: add confirmation dialog
+        resetRules();
+        renderRules();
+    });
 
     renderRules();
 });
