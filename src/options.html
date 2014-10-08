@@ -7,93 +7,221 @@
 
     <title>RegExp Download Organizer</title>
 
-    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <style>
-        .panel-heading {
-            cursor: pointer;
-        }
-
         .form-control::-moz-placeholder {
-            color: #aaa !important;
-            opacity: 1;
+        color: #aaa !important;
+        opacity: 1;
         }
 
         .form-control:-ms-input-placeholder {
-            color: #aaa !important;
+        color: #aaa !important;
         }
 
         .form-control::-webkit-input-placeholder {
-            color: #aaa !important;
+        color: #aaa !important;
+        }
+
+        .panel-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        }
+
+        input {
+        font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+        }
+
+        #main-toolbar {
+        margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1 class="page-header">Download rules</h1>
+    <h1 class="page-header">Download rules
+        <small></small>
+    </h1>
 
     <div class="row">
         <div class="col-sm-8">
             <div class="panel-group" id="rules-container">
 
             </div>
-            <button id="add-rule-btn" type="button" class="btn btn-primary btn-block">Add Rule</button>
-            <button id="save-rules-btn" type="button" class="btn btn-success btn-block">Save Rules</button>
-            <button id="reset-rules-btn" type="button" class="btn btn-danger btn-block">Reset Rules</button>
+            <div id="main-toolbar" class="btn-toolbar">
+                <div class="btn-group pull-right">
+                    <button id="add-rule-btn" type="button" class="btn btn-success">
+                        <span class="glyphicon glyphicon-plus"></span> Add Rule
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-4">
+            <!--<div class="btn-group">-->
+            <!--<button type="button" class="btn btn-success btn-block">Add Rule</button>-->
+            <!--<button id="save-rules-btn" type="button" class="btn btn-success btn-block">Save Rules</button>-->
+            <!--<button id="reset-rules-btn" type="button" class="btn btn-danger btn-block">Reset Rules</button>-->
+
+            <!--</div>-->
+
+            <div class="panel panel-info">
+                <!--<div class="panel-heading">-->
+                <!--<h3 class="panel-title">Help</h3>-->
+                <!--</div>-->
+                <div class="panel-body">
+                    <h4>Rules</h4>
+
+                    <p>The rules are applied one by one whenever you start downloading a file. Each rule consists of
+                        matchers and a download path pattern.
+                        The matchers are actually a set of <i>regular expressions</i> that applied to the
+                        <b>filetype</b>, <b>URL</b>,
+                        <b>referrer URL</b> and <b>filename</b> of the download item.
+                        If all of the non-empty mathers succeed for some rule, the file is renamed according to the
+                        download path pattern of this rule, the rest of the rules are skipped.</p>
+
+                    <p>
+                        All the regular expressions are case-insensitive.
+                    </p>
+
+                    <h4>Matchers</h4>
+
+                    <p>You can use any <i>RegExp</i> constructions in the matchers (even the <i>capturing groups</i>).
+                    </p>
+
+                    <p>There is a <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types"
+                                     target="_blank">list of common MIME types</a> for reference.</p>
+
+                    <h4>Destination path pattern</h4>
+
+                    <p>This part of a rule defines a destination path where the downloaded file will be stored.</p>
+
+                    <p>You can access the captured groups from the matchers using special
+                        placeholders in the following format — <code>${matcher:num}</code>, where
+                        <code>matcher</code> is an id of the matcher and <code>num</code> is a number of the capturing
+                        group starting from 1. For example placeholder <code>${referrer:1}</code> will be substituted
+                        with the contents of the capturing group #1 from the <b>Referrer</b> matcher. <br/>
+                        To access a whole field use a placeholder with no index (e.g. <code>${filename}</code>).</p>
+
+                    <p>There is a list of the available placeholders: <code>mime</code>, <code>url</code>, <code>referrer</code>,
+                        <code>filename</code>.
+                    </p>
+
+                    <p>The result path is forced by <b>Chrome</b> within the default download folder. You can use
+                        symbolic links to circumvent this limitation.
+                    </p>
+
+                    <h4>RegExp cheatsheet</h4>
+
+                    <p>
+                        <strong>"|"</strong> is an OR operator. E.g. <code>facebook|google</code> matches any string
+                        with either <code>facebook</code> or <code>google</code> in it.<br/>
+                        <strong>"."</strong> is a single-character wildcard. E.g. <code>a.b</code> matches
+                        <code>a-b</code>, <code>acb</code>, <code>a b</code>, etc.<br/>
+                        <strong>".*"</strong> is a multi-character wildcard (can match zero characters)<br/>
+                        <strong>".+"</strong> is a multi-character wildcard (cannot match zero characters, requires at
+                        least one character to match)<br/>
+                        <strong>"\"</strong> is used to escape special symbols. E.g. dots in
+                        <code>www\.google\.com</code> are not single-character wildcards.<br/>
+                        Capturing groups are regular expressions surrounded by round brackets <strong>"( )"</strong>.
+                        E.g. <code>www\.(.+)\.com</code> will match <b>.com</b>-domain names and store domain name
+                        without
+                        <b>"www."</b> prefix and <b>".com"</b> suffix in group <b>1</b>.<br/>
+                    </p>
+
+                    <p>More info about regular expressions:
+                        <a href="http://en.wikipedia.org/wiki/Regular_expression" target="_blank">Wikipedia</a>,
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">Mozilla Developer Network</a>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<script src="jquery.min.js"></script>
-<script src="bootstrap.min.js"></script>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="options.js"></script>
+
 <script type="text/html" id="rule-template">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title" data-parent="#rules-container"></h3>
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#rules-container" href="#"></a>
+                    </h4>
+                </div>
+                <div class="col-sm-3">
+                    <div class="btn-toolbar pull-right">
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default up"><span class="glyphicon glyphicon-chevron-up"></span>
+                            </button>
+                            <button class="btn btn-default down"><span class="glyphicon glyphicon-chevron-down"></span>
+                            </button>
+                        </div>
+                        <div class="btn-group btn-group-xs ">
+                            <button class="btn btn-danger remove"><span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="collapse" class="panel-collapse collapse">
             <div class="panel-body">
-                <button type="button" class="btn btn-danger pull-right">Delete Rule</button>
                 <form class="form-horizontal" role="form">
-                    <h4>Matchers</h4>
+                    <h4>Matchers
+                        <small>(at least one is required)</small>
+                    </h4>
 
-                    <p class="help-block">A rule applies if it matches each of its non-empty fields.</p>
+                    <p class="help-block"></p>
 
                     <div class="form-group form-group-sm">
                         <label class="control-label col-sm-3">MIME&nbsp;(Filetype):</label>
 
-                        <div class="col-sm-9 has-feedback"><input data-field="mime" class="form-control" type="text"
-                                                                  placeholder="E.g. image/jpeg"
-                                                                  data-toggle="tooltip" data-placement="right" data-container="body"
-                                                                  title="Feel free to use 'or' operation (e.g. image/jpeg|image/png) and regexp rules (e.g. image/.*) to handle multiple types"/>
+                        <div class="col-sm-9 has-feedback">
+                            <input data-field="mime" class="form-control" type="text"
+                                   placeholder="E.g. image/jpeg"
+                                   data-toggle="tooltip" data-placement="right" data-container="body"
+                                   title="Feel free to use 'or' operation (e.g. image/jpeg|image/png) and regexp rules (e.g. image/.*) to handle multiple types"/>
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="control-label col-sm-3">File URL:</label>
 
-                        <div class="col-sm-9"><input data-field="url" class="form-control" type="text"
-                                                     placeholder="E.g. .*\.instagram\.com"/>
+                        <div class="col-sm-9">
+                            <input data-field="url" class="form-control" type="text"
+                                   placeholder="E.g. .*\.instagram\.com"/>
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="control-label col-sm-3">Referrer URL:</label>
 
-                        <div class="col-sm-9"><input data-field="referrer" class="form-control" type="text"
-                                                     data-toggle="tooltip" data-placement="right" data-container="body"
-                                                     title="Sometimes large websites store images and files in Content Distribution Networks. You can use this field instead of File URL to handle such cases"
-                                                     placeholder="E.g. drive\.gooogle\.com"/>
+                        <div class="col-sm-9">
+                            <input data-field="referrer" class="form-control" type="text"
+                                   data-toggle="tooltip" data-placement="right" data-container="body"
+                                   title="Sometimes large websites store images and files in Content Distribution Networks. You can use this field instead of File URL to handle such cases"
+                                   placeholder="E.g. drive\.gooogle\.com"/>
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="control-label col-sm-3">Filename:</label>
 
-                        <div class="col-sm-9"><input data-field="filename" class="form-control" type="text" placeholder="E.g. \.zip$"
-                                                     data-toggle="tooltip" data-placement="right" data-container="body"
-                                                     title="This field applies to the filename part only (e.g. download.zip)"/>
+                        <div class="col-sm-9">
+                            <input data-field="filename" class="form-control" type="text"
+                                   placeholder="E.g. \.zip$"
+                                   data-toggle="tooltip" data-placement="right" data-container="body"
+                                   title="This field applies to the filename part only (e.g. download.zip)"/>
                         </div>
                     </div>
 
-                    <h4>Destination Path</h4>
+                    <h4>Destination path
+                        <small>(within default download folder)</small>
+                    </h4>
 
                     <div class="form-group">
                         <div class="col-sm-12">
@@ -101,15 +229,6 @@
                                    data-toggle="tooltip" data-placement="right" data-container="body"
                                    title="Please do not use backslash('\') as a folder delimiter. Use a common slash('/') instead"
                                    placeholder="E.g. images/${referrer:1}/${filename}"/>
-
-                            <p class="help-block">You can access captured groups from the matchers above using placeholders with
-                                index starting from 1 (e.g. <code>${referrer:1}</code>).
-                                To access the whole field use a placeholder with no index (e.g. <code>${filename}</code>).<br/>
-                                Available placeholders: <code>mime</code>, <code>url</code>, <code>referrer</code>,
-                                <code>filename</code>.<br/>
-                                The result path will be set within default download folder. You can use symbolic links to
-                                circumvent this limitation.
-                            </p>
                         </div>
                     </div>
                 </form>

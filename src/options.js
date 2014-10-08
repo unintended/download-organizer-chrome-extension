@@ -1,5 +1,5 @@
 const DEFAULT_RULES = [
-    { 'mime': 'image/.+', 'pattern': 'images/'},
+    { 'mime': 'image/.*', 'pattern': 'images/'},
     { 'mime': 'application/x-bittorrent', 'pattern': 'torrents/'}
 ];
 
@@ -14,6 +14,10 @@ function resetRules() {
     rulesets = JSON.parse(localStorage.getItem('rulesets'));
 }
 
+function saveRules() {
+    localStorage.setItem('rulesets', JSON.stringify(rulesets));
+}
+
 function renderRules(openIdx) {
     var $rulesContainer = $('#rules-container');
     $rulesContainer.empty();
@@ -25,23 +29,35 @@ function renderRules(openIdx) {
     rulesets.forEach(function (ruleset, idx) {
 
         function updateTitle() {
-            $('.panel-title', $rule).text(ruleset.pattern || 'Empty rule');
+            var keys = Object.keys(ruleset).filter(function(key) { return key !== 'pattern' });
+            $('.panel-title a', $rule).text(ruleset.pattern && keys.length ?
+                keys.join(', ') + ' ➞ ' + ruleset.pattern
+                : 'Empty rule');
         }
 
         var $rule = $($('#rule-template').html());
 
         updateTitle();
 
-        $('.panel-heading', $rule).click(function () {
-            $('#collapse' + idx, $rule).collapse('toggle');
-        });
-        $('.panel-collapse', $rule).attr('id', 'collapse' + idx).collapse({
-            'parent': '#rules-container',
-            'toggle': false
-        });
-        if (idx === openIdx) {
-            $('.panel-collapse', $rule).addClass('in');
-        }
+        $('.panel-collapse', $rule).attr('id', 'collapse' + idx);
+        $('.panel-title a', $rule).attr('href', '#collapse' + idx);
+        $('.panel-collapse', $rule).toggleClass('in', idx === openIdx);
+
+        // first item
+        $('button.up', $rule).toggleClass('disabled', !idx);
+        // last item
+        $('button.down', $rule).toggleClass('disabled', idx + 1 == rulesets.length);
+
+
+
+//        $('.panel-title', $rule).click(function () {
+//            $('#collapse' + idx, $rule).collapse('toggle');
+//        });
+//
+//        .collapse({
+//            'parent': '#rules-container',
+//            'toggle': false
+//        });
 
         $('input', $rule).tooltip();
 
@@ -59,11 +75,29 @@ function renderRules(openIdx) {
                     delete ruleset[field];
                 }
             }
+            saveRules();
             updateTitle();
         });
 
-        $('button', $rule).click(function () {
+        $('button.remove', $rule).click(function () {
             rulesets.splice(idx, 1);
+            saveRules();
+            renderRules();
+        });
+
+        $('button.up', $rule).click(function () {
+            var tmp = rulesets[idx - 1];
+            rulesets[idx - 1] = rulesets[idx];
+            rulesets[idx] = tmp;
+            saveRules();
+            renderRules();
+        });
+
+        $('button.down', $rule).click(function () {
+            var tmp = rulesets[idx + 1];
+            rulesets[idx + 1] = rulesets[idx];
+            rulesets[idx] = tmp;
+            saveRules();
             renderRules();
         });
 
@@ -77,20 +111,23 @@ $(function () {
         renderRules(rulesets.length - 1);
     });
 
-    $('#save-rules-btn').click(function () {
-        rulesets = rulesets.filter(function (ruleset) {
-            return !$.isEmptyObject(ruleset);
-        });
-
-        localStorage.setItem('rulesets', JSON.stringify(rulesets));
-        renderRules();
-    });
+//    $('#save-rules-btn').click(function () {
+//        rulesets = rulesets.filter(function (ruleset) {
+//            return !$.isEmptyObject(ruleset);
+//        });
+//
+//        saveRules();
+//        renderRules();
+//    });
 
     $('#reset-rules-btn').click(function () {
-        // TODO: add confirmation dialog
-        resetRules();
-        renderRules();
+        if (confirm('Reset rules?')) {
+            resetRules();
+            renderRules();
+        }
     });
+
+    $('h1 small').text('version ' + chrome.runtime.getManifest().version)
 
     renderRules();
 });
