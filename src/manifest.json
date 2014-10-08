@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+
+    "name": "__MSG_appName__",
+    "short_name": "REDownloadOrganizer",
+    "description": "__MSG_appDesc__",
+    "default_locale": "en",
+
+    "version": "0.1",
+    "options_page": "options.html",
+    "homepage_url": "https://bitbucket.org/lfk/downloads-router-chrome-extension",
+
+    "permissions": [
+        "downloads"
+    ],
+
+    "background": {
+        "scripts": ["manager.js"],
+        "persistent": false
+    }
+}

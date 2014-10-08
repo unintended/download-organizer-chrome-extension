@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>RegExp Download Organizer</title>
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+
+    <style>
+        .panel-heading {
+            cursor: pointer;
+        }
+
+        .form-control::-moz-placeholder {
+            color: #aaa !important;
+            opacity: 1;
+        }
+
+        .form-control:-ms-input-placeholder {
+            color: #aaa !important;
+        }
+
+        .form-control::-webkit-input-placeholder {
+            color: #aaa !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="page-header">Download rules</h1>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="panel-group" id="rules-container">
+
+            </div>
+            <button id="add-rule-btn" type="button" class="btn btn-primary btn-block">Add Rule</button>
+            <button id="save-rules-btn" type="button" class="btn btn-success btn-block">Save Rules</button>
+            <button id="reset-rules-btn" type="button" class="btn btn-danger btn-block">Reset Rules</button>
+        </div>
+    </div>
+</div>
+<script src="jquery.min.js"></script>
+<script src="bootstrap.min.js"></script>
+<script src="options.js"></script>
+<script type="text/html" id="rule-template">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title" data-parent="#rules-container"></h3>
+        </div>
+        <div id="collapse" class="panel-collapse collapse">
+            <div class="panel-body">
+                <button type="button" class="btn btn-danger pull-right">Delete Rule</button>
+                <form class="form-horizontal" role="form">
+                    <h4>Matchers</h4>
+
+                    <p class="help-block">A rule applies if it matches each of its non-empty fields.</p>
+
+                    <div class="form-group form-group-sm">
+                        <label class="control-label col-sm-3">MIME&nbsp;(Filetype):</label>
+
+                        <div class="col-sm-9 has-feedback"><input data-field="mime" class="form-control" type="text"
+                                                                  placeholder="E.g. image/jpeg"
+                                                                  data-toggle="tooltip" data-placement="right" data-container="body"
+                                                                  title="Feel free to use 'or' operation (e.g. image/jpeg|image/png) and regexp rules (e.g. image/.*) to handle multiple types"/>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="control-label col-sm-3">File URL:</label>
+
+                        <div class="col-sm-9"><input data-field="url" class="form-control" type="text"
+                                                     placeholder="E.g. .*\.instagram\.com"/>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="control-label col-sm-3">Referrer URL:</label>
+
+                        <div class="col-sm-9"><input data-field="referrer" class="form-control" type="text"
+                                                     data-toggle="tooltip" data-placement="right" data-container="body"
+                                                     title="Sometimes large websites store images and files in Content Distribution Networks. You can use this field instead of File URL to handle such cases"
+                                                     placeholder="E.g. drive\.gooogle\.com"/>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="control-label col-sm-3">Filename:</label>
+
+                        <div class="col-sm-9"><input data-field="filename" class="form-control" type="text" placeholder="E.g. \.zip$"
+                                                     data-toggle="tooltip" data-placement="right" data-container="body"
+                                                     title="This field applies to the filename part only (e.g. download.zip)"/>
+                        </div>
+                    </div>
+
+                    <h4>Destination Path</h4>
+
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input class="form-control" data-field="pattern" type="text"
+                                   data-toggle="tooltip" data-placement="right" data-container="body"
+                                   title="Please do not use backslash('\') as a folder delimiter. Use a common slash('/') instead"
+                                   placeholder="E.g. images/${referrer:1}/${filename}"/>
+
+                            <p class="help-block">You can access captured groups from the matchers above using placeholders with
+                                index starting from 1 (e.g. <code>${referrer:1}</code>).
+                                To access the whole field use a placeholder with no index (e.g. <code>${filename}</code>).<br/>
+                                Available placeholders: <code>mime</code>, <code>url</code>, <code>referrer</code>,
+                                <code>filename</code>.<br/>
+                                The result path will be set within default download folder. You can use symbolic links to
+                                circumvent this limitation.
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>
+</body>
+</html>
