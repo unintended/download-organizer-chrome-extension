@@ -78,7 +78,7 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
 
         // if no exact filename specified use the original one
         if (/\/$/.test(filename)) {
-            filename = filename + substitutions.filename;
+            filename = filename + substitutions.filename[0];
         }
 
         // remove trailing slashes
