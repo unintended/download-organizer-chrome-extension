@@ -142,13 +142,23 @@ $(function () {
     $showRuleFromTextModal.on('shown.bs.modal', function (e) {
         $('textarea', $showRuleFromTextModal).select();
     });
+    
+    $('#export-rules-btn').click(function() {
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(rulesets, null, '  ')));
+        pom.setAttribute('download', 'download_rules.json');
+//        pom.setAttribute('target', 'download_rules.json');
+        pom.click();
+    });
 
+    /*
     $('#reset-rules-btn').click(function () {
         if (confirm('Reset rules?')) {
             resetRules();
             renderRules();
         }
     });
+    */
 
     $('h1 small').text('version ' + chrome.runtime.getManifest().version)
 
