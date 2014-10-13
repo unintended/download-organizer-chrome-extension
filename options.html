@@ -31,12 +31,20 @@
             padding-bottom: 3px;
         }
 
-        input {
+        input:not([type='file']),textarea.form-control {
             font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
         }
 
         .form-control[readonly] {
             cursor: text!important;
+        }
+
+        .tab-content {
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding: 10px;
         }
 
         #main-toolbar {
@@ -62,7 +70,7 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a id="add-rule-from-text-btn" href="#">New rule from text...</a></li>
+                        <li><a id="add-rule-from-text-btn" data-toggle="modal" data-target="#addRuleFromTextModal" href="#">New rule from text...</a></li>
                     </ul>
                 </div>
             </div>
@@ -70,31 +78,26 @@
 
             </div>
             <div id="secondary-toolbar" class="btn-toolbar">
-                <!--<div class="btn-group">-->
                 <button id="export-rules-btn" type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-export"></span>
                     Export rules
                 </button>
-                <button id="import-rules-btn" type="button" class="btn btn-default">
+                <button id="import-rules-btn" type="button" class="btn btn-default"
+                        data-toggle="modal" data-target="#importRulesFromTextModal">
                     <span class="glyphicon glyphicon-import"></span>
-                    Import rules
+                    Import rules...
                 </button>
-                <!--</div>-->
+                <button id="reset-rules-btn" type="button" class="btn btn-danger pull-right">Reset rules...</button>
             </div>
         </div>
         <div class="col-sm-4">
-            <!--<div class="btn-group">-->
-            <!--<button type="button" class="btn btn-success btn-block">Add Rule</button>-->
-            <!--<button id="save-rules-btn" type="button" class="btn btn-success btn-block">Save Rules</button>-->
-            <!--<button id="reset-rules-btn" type="button" class="btn btn-danger btn-block">Reset Rules</button>-->
-
-            <!--</div>-->
-
-            <div class="panel panel-info">
-                <!--<div class="panel-heading">-->
-                <!--<h3 class="panel-title">Help</h3>-->
-                <!--</div>-->
-                <div class="panel-body">
+            <ul id="tab-links" class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-help" role="tab" data-toggle="tab">Help</a></li>
+                <li><a href="#tab-changelog" role="tab" data-toggle="tab">Changelog <span id="newBadge" class="badge" style="display:none;">New!</span></a></li>
+                <li><a href="#tab-about" role="tab" data-toggle="tab">About</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-help">
                     <h4>Download rules</h4>
 
                     <p>The download rules are applied one by one whenever you start downloading a file. Each rule
@@ -114,8 +117,32 @@
                     <p>You can use any <i>RegExp</i> constructions in the matchers (even the <i>capturing groups</i>).
                     </p>
 
-                    <p>There is a <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types"
-                                     target="_blank">list of common MIME types</a> for reference.</p>
+                    <h4>MIME types</h4>
+                    MIME filetype is a text string that describes a format of a file. Check the following list of the most common MIME types:
+                    <dl class="dl-horizontal">
+                        <dt>application/pdf</dt>
+                        <dd>PDF documents</dd>
+                        <dt>application/zip</dt>
+                        <dd>Compressed archives</dd>
+                        <dt>application/x-bittorrent</dt>
+                        <dd>Torrent files</dd>
+                        <dt>application/exe</dt>
+                        <dd>Windows executable</dd>
+                        <dt>audio/mpeg</dt>
+                        <dd>MP3 and other MPEG audio</dd>
+                        <dt>image/gif</dt>
+                        <dd>GIF images</dd>
+                        <dt>image/jpeg</dt>
+                        <dd>JPEG images</dd>
+                        <dt>image/png</dt>
+                        <dd>PNG images</dd>
+                        <dt>video/x-msvideo</dt>
+                        <dd>AVI video</dd>
+                    </dl>
+
+                    <p>There is also a more detailed <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types"
+                                                        target="_blank">list of common MIME types</a> for reference.</p>
+                    <p>Don't forget that you can always use a wildcard to match a group of filetypes (e.g. <code>image/.*</code> or <code>audio/.*</code>)</p>
 
                     <h4>Destination path pattern</h4>
 
@@ -160,6 +187,31 @@
                            target="_blank">Mozilla Developer Network</a>
                     </p>
                 </div>
+                <div class="tab-pane" id="tab-changelog">
+                    <h4>Version 0.2</h4>
+                    <ul>
+                        <li>Added import and export of rulesets</li>
+                        <li>Added "Share rule" button</li>
+                        <li>Small bugfixes and UI improvements</li>
+                    </ul>
+                    <h4>Version 0.1.1</h4>
+                    <ul>
+                        <li>Bugfixes</li>
+                    </ul>
+                    <h4>Version 0.1</h4>
+                    <ul>
+                        <li>Initial version, basic functionality</li>
+                    </ul>
+                </div>
+                <div class="tab-pane" id="tab-about">
+                    <h5><span style="color:#ee6c26;">♥</span> Made with love to humans by robots~</h5>
+                    <p>Feel free to report any issues and feature requests or to join the development via our GitHub page</p>
+                    <ul>
+                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension/issues">Issue tracker</a></li>
+                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension">GitHub repository</a></li>
+                        <li><a href="https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg">Chrome web store (for likes)</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -174,8 +226,8 @@
                 <h4 class="modal-title" id="showModalRuleTextLabel">Share rule</h4>
             </div>
             <div class="modal-body">
-                <p class="help-block">You can copy the text below and share your rule to someone. <br/>
-                    To import the rule back use "New rule from text..." button</p>
+                <p>You can copy the text below and share your rule to a friend. <br/>
+                    To import a rule use "New rule from text..." button</p>
                 <textarea class="form-control " rows="1" readonly></textarea>
             </div>
             <div class="modal-footer">
@@ -206,13 +258,44 @@
     </div>
 </div>
 
+<div id="importRulesFromTextModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importRulesModalTextLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="importRulesModalTextLabel">Import rules</h4>
+            </div>
+            <div class="modal-body">
+                <div class="rule-alert-container"></div>
+
+                <div class="form-group">
+                    <label for="importRulesFromTextModalFileInput">Load from file:</label>
+                    <input id="importRulesFromTextModalFileInput" type="file" accept="text/plain,application/json" />
+                </div>
+                <textarea class="form-control" rows="15"></textarea>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="import-rules-replace-existing-ckbx"> Replace existing rules (use with care)
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Import</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="options.js"></script>
 
 <script type="text/html" id="error-alert-template">
     <div class="alert alert-danger">
-        <strong>Error!</strong> <span id="alert-text"></span>
+        <span id="alert-text"></span>
         <button type="button" class="close" data-dismiss="alert">
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>

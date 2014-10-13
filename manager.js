@@ -98,5 +98,6 @@ var version = localStorage.getItem('version');
 if (!version || version != chrome.runtime.getManifest().version) {
     // Open the options page directly after installing or updating the extension
     localStorage.setItem('version', chrome.runtime.getManifest().version);
+    localStorage.setItem('showChangelog', true);
     chrome.tabs.create({ url: "options.html" });
 }

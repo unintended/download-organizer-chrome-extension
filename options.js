@@ -23,7 +23,7 @@ function renderRules(openIdx) {
     $rulesContainer.empty();
 
     if (!rulesets.length) {
-        $rulesContainer.html('<div class="alert alert-info" role="alert"><strong>There is no rules yet!</strong> Press "Add Rule" to add a new one.</div>')
+        $rulesContainer.html('<div class="alert alert-info" role="alert"><strong>There is no rules yet!</strong> Press "New rule" to create a new one.</div>')
     }
 
     rulesets.forEach(function (ruleset, idx) {
@@ -108,59 +108,115 @@ function showRuleShareModal(rule) {
 }
 
 $(function () {
+    ///// Buttons
+    // add rule button
     $('#add-rule-btn').click(function () {
         rulesets.unshift({});
         renderRules(0);
     });
-
-    // add from text modal
-    var $ruleModal = $('#addRuleFromTextModal');
-    $('.btn-primary', $ruleModal).click(function () {
-        var rule;
-        try {
-            rule = JSON.parse($('textarea', $ruleModal).val());
-        } catch (e) {
-            var $alert = $($('#error-alert-template').html());
-            $('#alert-text', $alert).text('Wrong rule format');
-            $('.rule-alert-container', $ruleModal).html($alert);
-            return;
-        }
-
-        $ruleModal.modal('hide');
-        rulesets.unshift(rule);
-        saveRules();
-        renderRules(0);
-    });
-    $('#add-rule-from-text-btn').click(function () {
-        $('textarea', $ruleModal).val('');
-        $('.rule-alert-container', $ruleModal).empty();
-        $ruleModal.modal();
-    });
-
-    // show modal
-    var $showRuleFromTextModal = $('#showRuleFromTextModal');
-    $showRuleFromTextModal.on('shown.bs.modal', function (e) {
-        $('textarea', $showRuleFromTextModal).select();
-    });
-    
+    // export rules
     $('#export-rules-btn').click(function() {
         var pom = document.createElement('a');
         pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(rulesets, null, '  ')));
         pom.setAttribute('download', 'download_rules.json');
-//        pom.setAttribute('target', 'download_rules.json');
         pom.click();
     });
-
-    /*
     $('#reset-rules-btn').click(function () {
         if (confirm('Reset rules?')) {
             resetRules();
             renderRules();
         }
     });
-    */
+
+    ///// Modals
+    // cleanup helper function
+    function bindCleanupOnImportModal() {
+        this.on('show.bs.modal', function (e) {
+            $('textarea', this).val('');
+            $('.rule-alert-container', this).empty();
+        });
+        this.on('shown.bs.modal', function (e) {
+            var $textarea = $('textarea', this);
+            $('textarea', this).focus();
+        });
+    }
+    // add from text modal
+    var $ruleModal = $('#addRuleFromTextModal');
+    bindCleanupOnImportModal.apply($ruleModal);
+    $('.btn-primary', $ruleModal).click(function () {
+        var rule;
+        try {
+            rule = JSON.parse($('textarea', $ruleModal).val());
+            if (rule.constructor.toString().indexOf('function Object()') !== 0) {
+                throw {'message': 'simple object expected'};
+            }
+        } catch (e) {
+            var $alert = $($('#error-alert-template').html());
+            $('#alert-text', $alert).text('Wrong rule format: ' + e.message);
+            $('.rule-alert-container', $ruleModal).html($alert);
+            return;
+        }
+        $ruleModal.modal('hide');
+        rulesets.unshift(rule);
+        saveRules();
+        renderRules(0);
+    });
+    // import rules modal
+    var $importRulesModal = $('#importRulesFromTextModal');
+    bindCleanupOnImportModal.apply($importRulesModal);
+    $importRulesModal.on('show.bs.modal', function (e) {
+        $('#import-rules-replace-existing-ckbx').prop('checked', false);
+    });
+    $('.btn-primary', $importRulesModal).click(function () {
+        var rules;
+        try {
+            rules = JSON.parse($('textarea', $importRulesModal).val());
+            if (!(rules instanceof Array)) {
+                throw {'message': 'array expected'};
+            }
+        } catch (e) {
+            var $alert = $($('#error-alert-template').html());
+            $('#alert-text', $alert).text('Wrong format: ' + e.message);
+            $('.rule-alert-container', $importRulesModal).html($alert);
+            return;
+        }
+        $importRulesModal.modal('hide');
+        if ($('#import-rules-replace-existing-ckbx').prop('checked')) {
+            rulesets = rules;
+        } else {
+            rulesets = rulesets.concat(rules);
+        }
+        saveRules();
+        renderRules();
+    });
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      $('textarea', $importRulesModal).val(reader.result);
+    }
+    $('#importRulesFromTextModalFileInput', $importRulesModal).change(function () {
+        if (!this.files) {
+            return;
+        }
+        var file = this.files[0];
+        if (!file) {
+            return;
+        }
+        reader.readAsText(file);
+    });
+    // link rule modal
+    var $showRuleFromTextModal = $('#showRuleFromTextModal');
+    $showRuleFromTextModal.on('shown.bs.modal', function (e) {
+        var $textarea = $('textarea', $showRuleFromTextModal);
+        $textarea.select().focus();
+    });
 
     $('h1 small').text('version ' + chrome.runtime.getManifest().version)
+
+    if (localStorage.getItem('showChangelog')) {
+//        $('#tab-links a[href="#tab-changelog"]').tab('show');
+        $('#newBadge').show();
+        localStorage.removeItem('showChangelog');
+    }
 
     renderRules();
 });
