@@ -29,7 +29,9 @@ function renderRules(openIdx) {
     rulesets.forEach(function (ruleset, idx) {
 
         function updateTitle() {
-            var keys = Object.keys(ruleset).filter(function(key) { return key !== 'pattern' });
+            var keys = Object.keys(ruleset).filter(function (key) {
+                return key !== 'pattern'
+            });
             $('.panel-title a', $rule).text(ruleset.pattern && keys.length ?
                 keys.join(', ') + ' ➞ ' + ruleset.pattern
                 : 'Empty rule');
@@ -47,17 +49,6 @@ function renderRules(openIdx) {
         $('button.up', $rule).toggleClass('disabled', !idx);
         // last item
         $('button.down', $rule).toggleClass('disabled', idx + 1 == rulesets.length);
-
-
-
-//        $('.panel-title', $rule).click(function () {
-//            $('#collapse' + idx, $rule).collapse('toggle');
-//        });
-//
-//        .collapse({
-//            'parent': '#rules-container',
-//            'toggle': false
-//        });
 
         $('input', $rule).tooltip();
 
@@ -85,6 +76,10 @@ function renderRules(openIdx) {
             renderRules();
         });
 
+        $('button.share', $rule).click(function () {
+            showRuleShareModal(ruleset);
+        });
+
         $('button.up', $rule).click(function () {
             var tmp = rulesets[idx - 1];
             rulesets[idx - 1] = rulesets[idx];
@@ -105,20 +100,48 @@ function renderRules(openIdx) {
     });
 }
 
+function showRuleShareModal(rule) {
+    var $showRuleFromTextModal = $('#showRuleFromTextModal');
+    $('textarea', $showRuleFromTextModal).val(JSON.stringify(rule));
+
+    $showRuleFromTextModal.modal();
+}
+
 $(function () {
     $('#add-rule-btn').click(function () {
-        rulesets.push({});
-        renderRules(rulesets.length - 1);
+        rulesets.unshift({});
+        renderRules(0);
     });
 
-//    $('#save-rules-btn').click(function () {
-//        rulesets = rulesets.filter(function (ruleset) {
-//            return !$.isEmptyObject(ruleset);
-//        });
-//
-//        saveRules();
-//        renderRules();
-//    });
+    // add from text modal
+    var $ruleModal = $('#addRuleFromTextModal');
+    $('.btn-primary', $ruleModal).click(function () {
+        var rule;
+        try {
+            rule = JSON.parse($('textarea', $ruleModal).val());
+        } catch (e) {
+            var $alert = $($('#error-alert-template').html());
+            $('#alert-text', $alert).text('Wrong rule format');
+            $('.rule-alert-container', $ruleModal).html($alert);
+            return;
+        }
+
+        $ruleModal.modal('hide');
+        rulesets.unshift(rule);
+        saveRules();
+        renderRules(0);
+    });
+    $('#add-rule-from-text-btn').click(function () {
+        $('textarea', $ruleModal).val('');
+        $('.rule-alert-container', $ruleModal).empty();
+        $ruleModal.modal();
+    });
+
+    // show modal
+    var $showRuleFromTextModal = $('#showRuleFromTextModal');
+    $showRuleFromTextModal.on('shown.bs.modal', function (e) {
+        $('textarea', $showRuleFromTextModal).select();
+    });
 
     $('#reset-rules-btn').click(function () {
         if (confirm('Reset rules?')) {
