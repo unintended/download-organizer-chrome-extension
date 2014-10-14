@@ -55,8 +55,8 @@ function renderRules(openIdx) {
             }
 
             var $titleContainer = $('.title-container', $rule);
+            $titleContainer.empty();
             $titleContainer.append($('<div class="col-sm-12">')
-//                    .append($('<span class="glyphicon glyphicon-filter"/>'))
                     .append(filters)
                     .append($('<span class="glyphicon glyphicon-folder-open"/>'))
                     .append($('<strong/>').text(folder))
