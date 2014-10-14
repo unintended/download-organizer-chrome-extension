@@ -131,12 +131,11 @@ $(function () {
     ///// Modals
     // cleanup helper function
     function bindCleanupOnImportModal() {
-        this.on('show.bs.modal', function (e) {
+        this.on('show.bs.modal', function () {
             $('textarea', this).val('');
             $('.rule-alert-container', this).empty();
         });
-        this.on('shown.bs.modal', function (e) {
-            var $textarea = $('textarea', this);
+        this.on('shown.bs.modal', function () {
             $('textarea', this).focus();
         });
     }
@@ -164,8 +163,11 @@ $(function () {
     // import rules modal
     var $importRulesModal = $('#importRulesFromTextModal');
     bindCleanupOnImportModal.apply($importRulesModal);
-    $importRulesModal.on('show.bs.modal', function (e) {
+    $importRulesModal.on('show.bs.modal', function () {
         $('#import-rules-replace-existing-ckbx').prop('checked', false);
+        // clean file input
+        var $importRulesFromTextModalFileInput = $('#importRulesFromTextModalFileInput');
+        $importRulesFromTextModalFileInput.replaceWith($importRulesFromTextModalFileInput.val('').clone(true));
     });
     $('.btn-primary', $importRulesModal).click(function () {
         var rules;
@@ -190,9 +192,9 @@ $(function () {
         renderRules();
     });
     var reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function() {
       $('textarea', $importRulesModal).val(reader.result);
-    }
+    };
     $('#importRulesFromTextModalFileInput', $importRulesModal).change(function () {
         if (!this.files) {
             return;
@@ -205,12 +207,12 @@ $(function () {
     });
     // link rule modal
     var $showRuleFromTextModal = $('#showRuleFromTextModal');
-    $showRuleFromTextModal.on('shown.bs.modal', function (e) {
+    $showRuleFromTextModal.on('shown.bs.modal', function () {
         var $textarea = $('textarea', $showRuleFromTextModal);
         $textarea.select().focus();
     });
 
-    $('h1 small').text('version ' + chrome.runtime.getManifest().version)
+    $('h1 small').text('version ' + chrome.runtime.getManifest().version);
 
     if (localStorage.getItem('showChangelog')) {
 //        $('#tab-links a[href="#tab-changelog"]').tab('show');
