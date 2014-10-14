@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <style>
+        .tooltip-inner {
+            max-width: 400px!important;
+        }
+
         .form-control::-moz-placeholder {
             color: #aaa !important;
             opacity: 1;
@@ -23,12 +27,37 @@
             color: #aaa !important;
         }
 
-        .panel-title {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding-top: 3px;
-            padding-bottom: 3px;
+        .title-container {
+            /*white-space: nowrap;*/
+            /*overflow: hidden;*/
+            /*text-overflow: ellipsis;*/
+            padding-top: 1px;
+            padding-bottom: 1px;
+            cursor: pointer;
+        }
+
+        .title-container span.glyphicon {
+            padding-left: 1em;
+            padding-right: 0.4em;
+        }
+        .title-container span.label {
+            margin-right: 0.3em;
+        }
+
+        .label-mime {
+            background-color: #428bca;
+        }
+        .label-url {
+            background-color: #428bca;
+        }
+        .label-referrer {
+            background-color: #428bca;
+        }
+        .label-filename {
+            background-color: #428bca;
+        }
+        .label-disabled {
+            background-color: #aaa;
         }
 
         input:not([type='file']),textarea.form-control {
@@ -309,10 +338,13 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-sm-9">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#rules-container" href="#"></a>
-                    </h4>
+                    <div class="row title-container"></div>
                 </div>
+                <!--<div class="col-sm-5 panel-title"><span class="glyphicon glyphicon-folder-open"></span><span class="rules-txt"></span></div>-->
+                <!--<div class="col-sm-4 panel-title"><span class="glyphicon glyphicon-folder-open"></span><span class="rules-txt"></span>-->
+                    <!--<h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#rules-container" href="#"></a>
+                    </h4>-->
                 <div class="col-sm-3">
                     <div class="btn-toolbar pull-right">
                         <div class="btn-group btn-group-xs">
@@ -332,7 +364,7 @@
                 </div>
             </div>
         </div>
-        <div id="collapse" class="panel-collapse collapse">
+        <div class="panel-collapse collapse" data-parent="#rules-container">
             <div class="panel-body">
                 <form class="form-horizontal" role="form">
                     <h4>Matchers

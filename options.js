@@ -1,3 +1,5 @@
+const RULE_FIELDS = ['mime', 'referrer', 'url', 'filename'];
+
 const DEFAULT_RULES = [
     { 'mime': 'image/.*', 'pattern': 'images/'},
     { 'mime': 'application/x-bittorrent', 'pattern': 'torrents/'}
@@ -32,9 +34,51 @@ function renderRules(openIdx) {
             var keys = Object.keys(ruleset).filter(function (key) {
                 return key !== 'pattern'
             });
-            $('.panel-title a', $rule).text(ruleset.pattern && keys.length ?
-                keys.join(', ') + ' ➞ ' + ruleset.pattern
-                : 'Empty rule');
+
+            var filters = document.createTextNode('Empty rule');
+            var folder = ' ';
+
+            if (ruleset.pattern && keys.length) {
+                filters = RULE_FIELDS.map(function (key) {
+                    var isRuleSet = ruleset[key];
+                    var $label = $('<span class="label" data-toggle="tooltip" data-container="body"/>').text(key.substr(0, 1).toUpperCase())
+                        .addClass(isRuleSet ? 'label-' + key : 'label-disabled');
+                    if (isRuleSet) {
+                        $label.tooltip({
+                            'title': "<strong>" + key + ":</strong> " + $('<div/>').text(ruleset[key]).html(),
+                            'html': true
+                        });
+                    }
+                    return $label;
+                });
+                folder = ruleset.pattern;
+            }
+
+            var $titleContainer = $('.title-container', $rule);
+            $titleContainer.append($('<div class="col-sm-12">')
+//                    .append($('<span class="glyphicon glyphicon-filter"/>'))
+                    .append(filters)
+                    .append($('<span class="glyphicon glyphicon-folder-open"/>'))
+                    .append($('<strong/>').text(folder))
+            );
+
+            $titleContainer.click(function () {
+                $('.panel-collapse', $rule).collapse('toggle');
+            });
+
+            /*if (ruleset.pattern && keys.length) {
+             $('.panel-title span', $rule).text(keys.join(', '));
+             $('.panel-title strong', $rule).text(ruleset.pattern);
+             } else {
+             $('.panel-title span', $rule).text('Empty rule');
+             $('.panel-title strong', $rule).html('&nbsp;');
+             }
+
+             $('.panel-title', $rule).click(function() {
+             $('.panel-collapse', $rule).collapse('toggle');
+             });*/
+
+//            $('.panel-title a', $rule).text(ruleset.pattern && keys.length ? keys.join(', ') + ' ➞ ' + ruleset.pattern : 'Empty rule');
         }
 
         var $rule = $($('#rule-template').html());
@@ -42,7 +86,7 @@ function renderRules(openIdx) {
         updateTitle();
 
         $('.panel-collapse', $rule).attr('id', 'collapse' + idx);
-        $('.panel-title a', $rule).attr('href', '#collapse' + idx);
+//        $('.panel-title a', $rule).attr('href', '#collapse' + idx);
         $('.panel-collapse', $rule).toggleClass('in', idx === openIdx);
 
         // first item
@@ -115,7 +159,7 @@ $(function () {
         renderRules(0);
     });
     // export rules
-    $('#export-rules-btn').click(function() {
+    $('#export-rules-btn').click(function () {
         var pom = document.createElement('a');
         pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(rulesets, null, '  ')));
         pom.setAttribute('download', 'download_rules.json');
@@ -139,6 +183,7 @@ $(function () {
             $('textarea', this).focus();
         });
     }
+
     // add from text modal
     var $ruleModal = $('#addRuleFromTextModal');
     bindCleanupOnImportModal.apply($ruleModal);
@@ -192,8 +237,8 @@ $(function () {
         renderRules();
     });
     var reader = new FileReader();
-    reader.onload = function() {
-      $('textarea', $importRulesModal).val(reader.result);
+    reader.onload = function () {
+        $('textarea', $importRulesModal).val(reader.result);
     };
     $('#importRulesFromTextModalFileInput', $importRulesModal).change(function () {
         if (!this.files) {
