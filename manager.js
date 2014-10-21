@@ -16,8 +16,8 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
 
     var item = {
         'mime': downloadItem.mime,
-        'referrer': downloadItem.referrer,
-        'url': downloadItem.url,
+        'referrer': decodeURI(downloadItem.referrer),
+        'url': decodeURI(downloadItem.url),
         'filename': downloadItem.filename,
         'startTime': new Date(downloadItem.startTime)
     };
