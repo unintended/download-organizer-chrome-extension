@@ -7,7 +7,8 @@ const DEFAULT_RULES = [
     { "description": "Zip and GZip archives", "mime": "application/(zip|gzip)", "pattern": "archives/", "enabled": true },
     { "description": "Pictures", "mime": "image/.*", "pattern": "images/", "enabled": true },
     { "description": "Torrents", "mime": "application/x-bittorrent", "pattern": "torrents/", "enabled": true },
-    { "description": "Organize everything else by date", "mime": ".*", "pattern": "other/${date:YYYY-MM-DD}/", "enabled": true },
+    { "description": "Organize downloads by domain-named folders", "pattern": "site/${referer:1}/", "referrer": ".+?://([^/]+)/.*", "enabled": false },
+    { "description": "Organize everything else by date", "mime": ".*", "pattern": "other/${date:YYYY-MM-DD}/", "enabled": false }
 ];
 
 if (localStorage.getItem('rulesets') === null) {
@@ -15,6 +16,14 @@ if (localStorage.getItem('rulesets') === null) {
 }
 
 var rulesets = JSON.parse(localStorage.getItem('rulesets')) || [];
+
+rulesets.every(rule => {
+    if (!rule.enabled) {
+        $("#disabled-rules-alert").show();
+        return false;
+    }
+    return true;
+});
 
 function resetRules() {
     localStorage.setItem('rulesets', JSON.stringify(DEFAULT_RULES));
@@ -158,7 +167,7 @@ $(function () {
     ///// Buttons
     // add rule button
     $('#add-rule-btn').click(function () {
-        rulesets.unshift({});
+        rulesets.unshift({ enabled: true });
         renderRules(0);
     });
     // export rules
@@ -271,7 +280,7 @@ $(function () {
 });
 
 $(function () {
-    $('.date-format-example').each(function() {
+    $('.date-format-example').each(function () {
         $(this).text(moment().format($(this).attr("data-value")));
     });
 });
