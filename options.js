@@ -1,8 +1,13 @@
 const RULE_FIELDS = ['mime', 'referrer', 'url', 'filename'];
 
 const DEFAULT_RULES = [
-    { 'mime': 'image/.*', 'pattern': 'images/'},
-    { 'mime': 'application/x-bittorrent', 'pattern': 'torrents/'}
+    { "description": "Windows installers and applications (.exe and .msi files)", "mime": "application/(x-msdownload|x-ms-installer|x-msi|exe)", "pattern": "installers/", "enabled": true },
+    { "description": "Linux installers (.deb and .rpm files)", "mime": "application/(x-debian-package|x-redhat-package-manager|x-rpm)", "pattern": "installers/", "enabled": true },
+    { "description": "Mac installers (.dmg files)", "mime": "application/x-apple-diskimage", "pattern": "installers/", "enabled": true },
+    { "description": "Zip and GZip archives", "mime": "application/(zip|gzip)", "pattern": "archives/", "enabled": true },
+    { "description": "Pictures", "mime": "image/.*", "pattern": "images/", "enabled": true },
+    { "description": "Torrents", "mime": "application/x-bittorrent", "pattern": "torrents/", "enabled": true },
+    { "description": "Organize everything else by date", "mime": ".*", "pattern": "other/${date:YYYY-MM-DD}/", "enabled": true },
 ];
 
 if (localStorage.getItem('rulesets') === null) {
@@ -56,29 +61,19 @@ function renderRules(openIdx) {
 
             var $titleContainer = $('.title-container', $rule);
             $titleContainer.empty();
-            $titleContainer.append($('<div class="col-sm-12">')
-                    .append(filters)
-                    .append($('<span class="glyphicon glyphicon-folder-open"/>'))
-                    .append($('<strong/>').text(folder))
-            );
 
+            var title = $('<div class="col-sm-12">')
+                .append(filters)
+                .append($('<span class="glyphicon glyphicon-folder-open"/>'))
+                .append($('<strong/>').text(folder));
+            if (ruleset.description) {
+                title.append('&emsp;')
+                    .append($('<small class="text-muted"/>').text(ruleset.description));
+            }
+            $titleContainer.append(title);
             $titleContainer.click(function () {
                 $('.panel-collapse', $rule).collapse('toggle');
             });
-
-            /*if (ruleset.pattern && keys.length) {
-             $('.panel-title span', $rule).text(keys.join(', '));
-             $('.panel-title strong', $rule).text(ruleset.pattern);
-             } else {
-             $('.panel-title span', $rule).text('Empty rule');
-             $('.panel-title strong', $rule).html('&nbsp;');
-             }
-
-             $('.panel-title', $rule).click(function() {
-             $('.panel-collapse', $rule).collapse('toggle');
-             });*/
-
-//            $('.panel-title a', $rule).text(ruleset.pattern && keys.length ? keys.join(', ') + ' ➞ ' + ruleset.pattern : 'Empty rule');
         }
 
         var $rule = $($('#rule-template').html());
@@ -86,7 +81,6 @@ function renderRules(openIdx) {
         updateTitle();
 
         $('.panel-collapse', $rule).attr('id', 'collapse' + idx);
-//        $('.panel-title a', $rule).attr('href', '#collapse' + idx);
         $('.panel-collapse', $rule).toggleClass('in', idx === openIdx);
 
         // first item
@@ -97,17 +91,26 @@ function renderRules(openIdx) {
         $('input', $rule).tooltip();
 
         for (var field in ruleset) {
-            $('input[data-field="' + field + '"]', $rule).val(ruleset[field]);
+            var element = $('input[data-field="' + field + '"]', $rule);
+            if (typeof ruleset[field] === "boolean" && element.is(':checkbox')) {
+                element.prop('checked', ruleset[field]);
+            } else {
+                element.val(ruleset[field]);
+            }
         }
 
         $('input', $rule).change(function () {
             var field = $(this).data('field');
             if (field) {
-                var val = $(this).val();
-                if (val && val.length) {
-                    ruleset[field] = val;
+                if ($(this).is(':checkbox')) {
+                    ruleset[field] = this.checked;
                 } else {
-                    delete ruleset[field];
+                    var val = $(this).val();
+                    if (val && val.length) {
+                        ruleset[field] = val;
+                    } else {
+                        delete ruleset[field];
+                    }
                 }
             }
             saveRules();
@@ -192,7 +195,7 @@ $(function () {
         try {
             rule = JSON.parse($('textarea', $ruleModal).val());
             if (rule.constructor.toString().indexOf('function Object()') !== 0) {
-                throw {'message': 'simple object expected'};
+                throw { 'message': 'simple object expected' };
             }
         } catch (e) {
             var $alert = $($('#error-alert-template').html());
@@ -219,7 +222,7 @@ $(function () {
         try {
             rules = JSON.parse($('textarea', $importRulesModal).val());
             if (!(rules instanceof Array)) {
-                throw {'message': 'array expected'};
+                throw { 'message': 'array expected' };
             }
         } catch (e) {
             var $alert = $($('#error-alert-template').html());
@@ -260,10 +263,15 @@ $(function () {
     $('h1 small').text('version ' + chrome.runtime.getManifest().version);
 
     if (localStorage.getItem('showChangelog')) {
-//        $('#tab-links a[href="#tab-changelog"]').tab('show');
         $('#newBadge').show();
         localStorage.removeItem('showChangelog');
     }
 
     renderRules();
+});
+
+$(function () {
+    $('.date-format-example').each(function() {
+        $(this).text(moment().format($(this).attr("data-value")));
+    });
 });

@@ -213,13 +213,35 @@
                     <p>More info about regular expressions:
                         <a href="http://en.wikipedia.org/wiki/Regular_expression" target="_blank">Wikipedia</a>,
                         <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp"
-                           target="_blank">Mozilla Developer Network</a>
+                            target="_blank">Mozilla Developer Network</a>
                     </p>
+
+                    <h4>Date formatter</h4>
+                    <p>
+                        You can add a special <code>date</code> placeholder into destination path to organize downloads by date and/or time. 
+                        There are some most useful examples:
+                        <ul>
+                            <li><code>${date}</code> → <code id="date-example-date" class="date-format-example" data-value="YYYY-MM-DD">2018-11-18</code></li>
+                            <li><code>${date:YYYY}</code> → <code id="date-example-year" class="date-format-example" data-value="YYYY">2018</code></li>
+                            <li><code>${date:YYYY, MMMM}</code> → <code id="date-example-year-monthname" class="date-format-example" data-value="YYYY, MMMM">2018, November</code></li>
+                            <li><code>${date:YYYY.MM.DD}</code> → <code id="date-example-year-month-day" class="date-format-example" data-value="YYYY.MM.DD">2018.11.18</code></li>
+                            <li><code>${date:YYYY.MM.DD_HH-mm-ss}</code> → <code id="date-example-date-with-time" class="date-format-example" data-value="YYYY.MM.DD_HH-mm-ss">2018.11.18_16-38-08</code></li>
+                        </ul>
+                    </p>
+
+                    <p>More info about date formatters in <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank">moment.js documentation</a>.</p>
                 </div>
                 <div class="tab-pane" id="tab-changelog">
+                    <h4>Version 0.2.4</h4>
+                    <ul>
+                        <li>Added date/time formatter for destination</li>
+                        <li>Added human-friendly descriptions for rules</li>
+                        <li>Now it's possible to disable rules instead of deleting them</li>
+                        <li>More predefined rules</li>
+                    </ul>
                     <h4>Version 0.2.3</h4>
                     <ul>
-                        <li>Fix issue with escaped URLs</li>
+                        <li>Fixed issue with escaped URLs</li>
                     </ul>
                     <h4>Version 0.2.2</h4>
                     <ul>
@@ -326,6 +348,7 @@
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="js/moment.min.js"></script>
 <script src="options.js"></script>
 
 <script type="text/html" id="error-alert-template">
@@ -345,13 +368,11 @@
                 <div class="col-sm-9">
                     <div class="row title-container"></div>
                 </div>
-                <!--<div class="col-sm-5 panel-title"><span class="glyphicon glyphicon-folder-open"></span><span class="rules-txt"></span></div>-->
-                <!--<div class="col-sm-4 panel-title"><span class="glyphicon glyphicon-folder-open"></span><span class="rules-txt"></span>-->
-                    <!--<h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#rules-container" href="#"></a>
-                    </h4>-->
                 <div class="col-sm-3">
                     <div class="btn-toolbar pull-right">
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default share" title="Share"><span class="glyphicon glyphicon-share"></span></button>
+                        </div>
                         <div class="btn-group btn-group-xs">
                             <button class="btn btn-default up" title="Move up"><span class="glyphicon glyphicon-chevron-up"></span>
                             </button>
@@ -359,11 +380,7 @@
                             </button>
                         </div>
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default share" title="Share"><span class="glyphicon glyphicon-share"></span></button>
-                        </div>
-                        <div class="btn-group btn-group-xs ">
-                            <button class="btn btn-danger remove" title="Remove"><span class="glyphicon glyphicon-remove"></span>
-                            </button>
+                            <input data-field="enabled" type="checkbox" title="Enabled"/>
                         </div>
                     </div>
                 </div>
@@ -372,6 +389,14 @@
         <div class="panel-collapse collapse" data-parent="#rules-container">
             <div class="panel-body">
                 <form class="form-horizontal" role="form">
+                    <h4>Description</h4>
+                    <div class="form-group form-group-sm">
+                        <div class="col-sm-12">
+                            <input data-field="description" class="form-control" type="text"
+                                placeholder="Put some human-friendly description for your ruleset here"/>
+                        </div>
+                    </div>
+
                     <h4>Matchers
                         <small>(at least one is required)</small>
                     </h4>
@@ -428,6 +453,8 @@
                             <span class="help-block">If you end the path with '/', the original filename will be appended automatically</span>
                         </div>
                     </div>
+
+                    <button class="btn btn-danger remove" title="Remove">Delete rule</button>
                 </form>
             </div>
         </div>

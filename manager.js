@@ -10,6 +10,7 @@ const EXT_MIME_MAPPINGS = {
 };
 
 const RULE_FIELDS = ['mime', 'referrer', 'url', 'filename'];
+const DATE_FIELD = 'date';
 
 chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, suggest) {
     var rulesets = JSON.parse(localStorage.getItem('rulesets'));
@@ -33,6 +34,9 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
     }
 
     rulesets.every(function (rule) {
+        if (!rule.enabled) {
+            return true; // continue to the next rule
+        }
 
         var substitutions = {};
 
@@ -58,7 +62,15 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
 
         var result = true;
 
-        var filename = rule['pattern'].replace(/\$\{(\w+)(?::(\d+))?\}/g, function (orig, field, idx) {
+        var filename = rule['pattern'].replace(/\$\{(\w+)(?::(.+))?\}/g, function (orig, field, idx) {
+            if (field === DATE_FIELD) {
+                if (idx) {
+                    return moment(item.startTime).format(idx);
+                } else {
+                    return moment(item.startTime).format("YYYY-MM-DD");
+                }
+            }
+
             if (!substitutions[field]) {
                 console.log('Invalid field %s', field);
                 result = false;
@@ -94,6 +106,17 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
 });
 
 var version = localStorage.getItem('version');
+
+if (version !== null && version < '0.2.4') {
+    var rulesetsStr = localStorage.getItem('rulesets');
+    if (rulesetsStr) {
+        var rulesets = JSON.parse(rulesetsStr);
+        rulesets.forEach(rule => {
+            rule.enabled = true;
+        });
+        localStorage.setItem('rulesets', JSON.stringify(rulesets));
+    }
+}
 
 if (!version || version != chrome.runtime.getManifest().version) {
     // Open the options page directly after installing or updating the extension

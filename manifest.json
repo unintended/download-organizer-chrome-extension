@@ -4,7 +4,7 @@
   "short_name": "REDownloadOrganizer",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "options_page": "options.html",
   "homepage_url": "https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg",
   "icons": {
@@ -17,7 +17,7 @@
     "downloads"
   ],
   "background": {
-    "scripts": ["manager.js"],
+    "scripts": ["manager.js", "js/moment.min.js"],
     "persistent": false
   }
 }
