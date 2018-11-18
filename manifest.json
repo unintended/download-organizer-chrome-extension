@@ -4,7 +4,7 @@
   "short_name": "REDownloadOrganizer",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
-  "version": "0.2.4",
+  "version": "0.2.4.1",
   "options_page": "options.html",
   "homepage_url": "https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg",
   "icons": {
