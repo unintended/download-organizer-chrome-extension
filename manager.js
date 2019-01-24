@@ -62,7 +62,7 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
 
         var result = true;
 
-        var filename = rule['pattern'].replace(/\$\{(\w+)(?::(.+))?\}/g, function (orig, field, idx) {
+        var filename = rule['pattern'].replace(/\$\{(\w+)(?::(.+?))?\}/g, function (orig, field, idx) {
             if (field === DATE_FIELD) {
                 if (idx) {
                     return moment(item.startTime).format(idx);
