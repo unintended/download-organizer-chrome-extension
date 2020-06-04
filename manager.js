@@ -9,16 +9,20 @@ const EXT_MIME_MAPPINGS = {
     'torrent': 'application/x-bittorrent'
 };
 
-const RULE_FIELDS = ['mime', 'referrer', 'url', 'filename'];
+const RULE_FIELDS = ['mime', 'referrer', 'url', 'finalUrl', 'filename'];
 const DATE_FIELD = 'date';
 
 chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, suggest) {
+
+    console.log("Downloading item %o", downloadItem);
+
     var rulesets = JSON.parse(localStorage.getItem('rulesets'));
 
     var item = {
         'mime': downloadItem.mime,
         'referrer': decodeURI(downloadItem.referrer),
         'url': decodeURI(downloadItem.url),
+        'finalUrl': decodeURI(downloadItem.finalUrl),
         'filename': downloadItem.filename,
         'startTime': new Date(downloadItem.startTime)
     };
@@ -35,6 +39,7 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
 
     rulesets.every(function (rule) {
         if (!rule.enabled) {
+            console.log("Rule disabled: %o", rule);
             return true; // continue to the next rule
         }
 
@@ -57,8 +62,11 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
         });
 
         if (!success) {
+            console.log("Rule didn't match: %o", rule);
             return true; // continue to the next rule
         }
+
+        console.log("Rule matched: %o", rule);
 
         var result = true;
 
@@ -107,14 +115,16 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
 
 var version = localStorage.getItem('version');
 
-if (version !== null && version < '0.2.4') {
-    var rulesetsStr = localStorage.getItem('rulesets');
-    if (rulesetsStr) {
-        var rulesets = JSON.parse(rulesetsStr);
-        rulesets.forEach(rule => {
-            rule.enabled = true;
-        });
-        localStorage.setItem('rulesets', JSON.stringify(rulesets));
+if (version !== null) {
+    if (version < '0.2.4') {
+        var rulesetsStr = localStorage.getItem('rulesets');
+        if (rulesetsStr) {
+            var rulesets = JSON.parse(rulesetsStr);
+            rulesets.forEach(rule => {
+                rule.enabled = true;
+            });
+            localStorage.setItem('rulesets', JSON.stringify(rulesets));
+        }
     }
 }
 

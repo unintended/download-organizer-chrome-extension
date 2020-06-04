@@ -188,8 +188,7 @@
                         with the contents of the capturing group #1 from the <b>Referrer</b> matcher. <br/>
                         To access a whole field use a placeholder with no index (e.g. <code>${filename}</code>).</p>
 
-                    <p>There is a list of the available placeholders: <code>mime</code>, <code>url</code>, <code>referrer</code>,
-                        <code>filename</code>.
+                    <p>There is a list of the available placeholders: <code>mime</code>, <code>url</code>, <code>finalUrl</code>, <code>referrer</code>, <code>filename</code>.
                     </p>
 
                     <p>The result path is forced by <b>Chrome</b> within the default download folder. You can use
@@ -236,6 +235,10 @@
                     <p>More info about date formatters in <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank">moment.js documentation</a>.</p>
                 </div>
                 <div class="tab-pane" id="tab-changelog">
+                    <h4>Version 0.3</h4>
+                    <ul>
+                        <li>Added support for <strong>Final URL</strong> (file download url after all redirects) field and corresponding <code>finalUrl</code> placeholder</li>
+                    </ul>
                     <h4>Version 0.2.5</h4>
                     <ul>
                         <li>Fixed typo in predefined referrer rule (reset the rules if your referrer rule doesn't work)</li>
@@ -424,11 +427,22 @@
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
-                        <label class="control-label col-sm-3">File URL:</label>
+                        <label class="control-label col-sm-3">Download URL:</label>
 
                         <div class="col-sm-9">
                             <input data-field="url" class="form-control" type="text"
                                    placeholder="E.g. .*\.instagram\.com"/>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm has-feedback">
+                        <label class="control-label col-sm-3" 
+                               title="File download URL after all redirects">Final download URL:</label>
+
+                        <div class="col-sm-9">
+                            <input data-field="finalUrl" class="form-control" type="text"
+                                   placeholder="E.g. .*\.instagram\.com"
+                                   data-toggle="tooltip" data-placement="right" data-container="body"
+                                   title="File download URL after all redirects"/>
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
