@@ -5,7 +5,8 @@ Chrome extesion that allows you to set custom download locations with a flexible
 
 Try at [Chrome web store](https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg)
 
-=== debugging === 
+## Debugging
+
 Before opening an issue, please do the following and try to figure out what fields are most suiatble for your rule. To debug the addon:
 1. Open chrome://extensions/
 1. Open inspect view and check console ![image](https://user-images.githubusercontent.com/641973/97117295-beedb900-1713-11eb-8e79-541f2d89659b.png)
