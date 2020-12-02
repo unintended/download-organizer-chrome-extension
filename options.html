@@ -110,6 +110,20 @@
             <div class="panel-group" id="rules-container">
 
             </div>
+            
+            <!-- 
+            <form class="form-horizontal" role="form">
+                <div class="form-group form-group-sm">
+                    <label class="control-label col-sm-9">Default name conflict action:</label>
+                    <div class="col-sm-3 has-feedback">
+                        <select id='default-action-select' class="form-control">
+                            <option value="uniquify">Uniquify</option>
+                            <option value="overwrite">Overwrite</option>
+                            <option value="prompt">Prompt</option>
+                        </select>   
+                    </div>
+                </div>
+            </form> -->
             <div id="secondary-toolbar" class="btn-toolbar">
                 <button id="export-rules-btn" type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-export"></span>
@@ -235,6 +249,10 @@
                     <p>More info about date formatters in <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank">moment.js documentation</a>.</p>
                 </div>
                 <div class="tab-pane" id="tab-changelog">
+                    <h4>Version 0.3.1</h4>
+                    <ul>
+                        <li>Added support for name conflict action</li>
+                    </ul>
                     <h4>Version 0.3</h4>
                     <ul>
                         <li>Added support for <strong>Final URL</strong> (file download url after all redirects) field and corresponding <code>finalUrl</code> placeholder</li>
@@ -477,6 +495,18 @@
                                    title="Please do not use backslash('\') as a folder delimiter. Use a common slash('/') instead"
                                    placeholder="E.g. images/${referrer:1}/${filename}"/>
                             <span class="help-block">If you end the path with '/', the original filename will be appended automatically</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label class="control-label col-sm-9">Name conflict action:</label>
+                        <div class="col-sm-3 has-feedback">
+                            <select data-field="conflict-action" class="form-control">
+                                <!-- <option value="">Default</option> -->
+                                <option value="uniquify">Uniquify</option>
+                                <option value="overwrite">Overwrite</option>
+                                <option value="prompt">Prompt ("Save as..")</option>
+                            </select>   
                         </div>
                     </div>
 

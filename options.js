@@ -100,9 +100,18 @@ function renderRules(openIdx) {
         $('input', $rule).tooltip();
 
         for (var field in ruleset) {
-            var element = $('input[data-field="' + field + '"]', $rule);
+            var element = $('input[data-field="' + field + '"],select[data-field="' + field + '"]', $rule);
             if (typeof ruleset[field] === "boolean" && element.is(':checkbox')) {
                 element.prop('checked', ruleset[field]);
+            } else if (element.is('select')) {
+                var selected = ruleset[field];
+                if (selected && selected.length) {
+                    element.find('option').each(function() {
+                        if($(this).val() == selected) {
+                            $(this).prop('selected', true);
+                        }
+                    });
+                }
             } else {
                 element.val(ruleset[field]);
             }
@@ -124,6 +133,19 @@ function renderRules(openIdx) {
             }
             saveRules();
             updateTitle();
+        });
+
+        $('select', $rule).change(function () {
+            var field = $(this).data('field');
+            if (field) {
+                var val = $(this).val();
+                if (val && val.length) {
+                    ruleset[field] = val;
+                } else {
+                    delete ruleset[field];
+                }
+            }
+            saveRules();
         });
 
         $('button.remove', $rule).click(function () {

@@ -11,6 +11,7 @@ const EXT_MIME_MAPPINGS = {
 
 const RULE_FIELDS = ['mime', 'referrer', 'url', 'finalUrl', 'filename'];
 const DATE_FIELD = 'date';
+const DEFAULT_CONFLICT_ACTION = 'uniquify';
 
 chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, suggest) {
 
@@ -104,10 +105,15 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
         // remove trailing slashes
         filename = filename.replace(/^\/+/, '');
 
+        var conflictAction = rule['conflict-action'];
+        if (!conflictAction) {
+            conflictAction = DEFAULT_CONFLICT_ACTION;
+        }
+
         if (result) {
             suggest({
                 filename: filename,
-                conflictAction: 'uniquify'
+                conflictAction: conflictAction
             });
         }
     });
