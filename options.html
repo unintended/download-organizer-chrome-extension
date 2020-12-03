@@ -125,15 +125,28 @@
                 </div>
             </form> -->
             <div id="secondary-toolbar" class="btn-toolbar">
-                <button id="export-rules-btn" type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-export"></span>
-                    Export rules
-                </button>
-                <button id="import-rules-btn" type="button" class="btn btn-default"
-                        data-toggle="modal" data-target="#importRulesFromTextModal">
-                    <span class="glyphicon glyphicon-import"></span>
-                    Import rules...
-                </button>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-export"></span>
+                        Export rules
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a id="export-rules-btn" href="#">Save to file</a></li>
+                        <li><a id="sync-rules-to-cloud-btn" href="#">Sync to cloud</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-export"></span>
+                        Import rules
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a id="import-rules-btn" href="#" data-toggle="modal" data-target="#importRulesFromTextModal">Load from file...</a></li>
+                        <li><a id="sync-rules-from-cloud-btn" href="#">Sync from cloud</a></li>
+                    </ul>
+                </div>
                 <button id="reset-rules-btn" type="button" class="btn btn-danger pull-right">Reset rules...</button>
             </div>
         </div>
@@ -249,6 +262,10 @@
                     <p>More info about date formatters in <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank">moment.js documentation</a>.</p>
                 </div>
                 <div class="tab-pane" id="tab-changelog">
+                    <h4>Version 0.3.2</h4>
+                    <ul>
+                        <li>Support export to/from the cloud storage</li>
+                    </ul>
                     <h4>Version 0.3.1</h4>
                     <ul>
                         <li>Added support for name conflict action</li>

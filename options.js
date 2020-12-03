@@ -34,6 +34,20 @@ function saveRules() {
     localStorage.setItem('rulesets', JSON.stringify(rulesets));
 }
 
+function syncRulesToCloud() {
+    chrome.storage.sync.set({'config': {'rulesets': rulesets}});
+}
+
+function syncRulesFromCloud() {
+    chrome.storage.sync.get(['config'], function(result) {
+        if (result.config) {
+            rulesets = result.config.rulesets;
+            saveRules();
+            renderRules();
+        }
+    });
+}
+
 function renderRules(openIdx) {
     var $rulesContainer = $('#rules-container');
     $rulesContainer.empty();
@@ -199,6 +213,18 @@ $(function () {
         pom.setAttribute('download', 'download_rules.json');
         pom.click();
     });
+
+    $('#sync-rules-to-cloud-btn').click(function () {
+        if (confirm('Sync rules to cloud storage?')) {
+            syncRulesToCloud();
+        }
+    });
+    $('#sync-rules-from-cloud-btn').click(function () {
+        if (confirm('Sync rules from cloud storage? All existing rules will be overriden.')) {
+            syncRulesFromCloud();
+        }
+    });
+
     $('#reset-rules-btn').click(function () {
         if (confirm('Reset rules?')) {
             resetRules();
