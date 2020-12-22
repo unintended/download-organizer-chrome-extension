@@ -260,6 +260,14 @@
                     </p>
 
                     <p>More info about date formatters in <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank">moment.js documentation</a>.</p>
+
+                    <h4>Overriding file extensions</h4>
+                    <p>
+                        It's not possible to override extensions for known MIME-types because of the Chrome API limitations. 
+                        However, as a workaround you can use 3rd-party extensions to modify the response headers for the urls you download, 
+                        changing the <code>Content-Type</code> header to some unexpected MIME-type, e.g. <code>application/x-unknown-mime-type</code>.
+                        Then you will be able to create a rule with a custom file extension in <b>destination path</b>.
+                    </p>
                 </div>
                 <div class="tab-pane" id="tab-changelog">
                     <h4>Version 0.3.2</h4>
