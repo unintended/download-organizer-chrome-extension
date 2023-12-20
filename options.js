@@ -4,51 +4,45 @@ const DEFAULT_RULES = [
     { "description": "Windows installers and applications (.exe and .msi files)", "mime": "application/(x-msdownload|x-ms-installer|x-msi|exe)", "pattern": "installers/", "enabled": true },
     { "description": "Linux installers (.deb and .rpm files)", "mime": "application/(x-debian-package|x-redhat-package-manager|x-rpm)", "pattern": "installers/", "enabled": true },
     { "description": "Mac installers (.dmg files)", "mime": "application/x-apple-diskimage", "pattern": "installers/", "enabled": true },
-    { "description": "Zip and GZip archives", "mime": "application/(zip|gzip)", "pattern": "archives/", "enabled": true },
+    { "description": "Zip and GZip archives", "mime": "application/(zip|gzip|x-gzip)", "pattern": "archives/", "enabled": true },
     { "description": "Pictures", "mime": "image/.*", "pattern": "images/", "enabled": true },
     { "description": "Torrents", "mime": "application/x-bittorrent", "pattern": "torrents/", "enabled": true },
     { "description": "Organize downloads by domain-named folders", "pattern": "site/${referrer:1}/", "referrer": ".+?://([^/]+)/.*", "enabled": false },
     { "description": "Organize everything else by date", "mime": ".*", "pattern": "other/${date:YYYY-MM-DD}/", "enabled": false }
 ];
 
-if (localStorage.getItem('rulesets') === null) {
-    resetRules();
+
+var rulesets = undefined;
+
+var storageData = await chrome.storage.local.get('rulesets');
+if (storageData.rulesets) {
+    rulesets = structuredClone(storageData.rulesets) || [];
+} else {
+    await resetRules();
+    await renderRules();
 }
 
-var rulesets = JSON.parse(localStorage.getItem('rulesets')) || [];
-
-rulesets.every(rule => {
-    if (!rule.enabled) {
-        $("#disabled-rules-alert").show();
-        return false;
-    }
-    return true;
-});
-
-function resetRules() {
-    localStorage.setItem('rulesets', JSON.stringify(DEFAULT_RULES));
-    rulesets = JSON.parse(localStorage.getItem('rulesets'));
+async function resetRules() {
+    await chrome.storage.local.set({'rulesets': DEFAULT_RULES});
+    rulesets = structuredClone(DEFAULT_RULES);
 }
 
-function saveRules() {
-    localStorage.setItem('rulesets', JSON.stringify(rulesets));
+async function saveRules() {
+    await chrome.storage.local.set({'rulesets': rulesets});
 }
 
-function syncRulesToCloud() {
-    chrome.storage.sync.set({'config': {'rulesets': rulesets}});
+async function syncRulesToCloud() {
+    await chrome.storage.sync.set({'config': {'rulesets': rulesets}});
 }
 
-function syncRulesFromCloud() {
-    chrome.storage.sync.get(['config'], function(result) {
-        if (result.config) {
-            rulesets = result.config.rulesets;
-            saveRules();
-            renderRules();
-        }
-    });
+async function syncRulesFromCloud() {
+    var result = await chrome.storage.sync.get(['config']);
+    rulesets = result.config.rulesets;
+    await saveRules();
+    await renderRules();
 }
 
-function renderRules(openIdx) {
+async function renderRules(openIdx) {
     var $rulesContainer = $('#rules-container');
     $rulesContainer.empty();
 
@@ -145,7 +139,7 @@ function renderRules(openIdx) {
                     }
                 }
             }
-            saveRules();
+            saveRules().then(renderRules);
             updateTitle();
         });
 
@@ -159,13 +153,12 @@ function renderRules(openIdx) {
                     delete ruleset[field];
                 }
             }
-            saveRules();
+            saveRules().then(renderRules);
         });
 
         $('button.remove', $rule).click(function () {
             rulesets.splice(idx, 1);
-            saveRules();
-            renderRules();
+            saveRules().then(renderRules);
         });
 
         $('button.share', $rule).click(function () {
@@ -176,19 +169,25 @@ function renderRules(openIdx) {
             var tmp = rulesets[idx - 1];
             rulesets[idx - 1] = rulesets[idx];
             rulesets[idx] = tmp;
-            saveRules();
-            renderRules();
+            saveRules().then(renderRules);
         });
 
         $('button.down', $rule).click(function () {
             var tmp = rulesets[idx + 1];
             rulesets[idx + 1] = rulesets[idx];
             rulesets[idx] = tmp;
-            saveRules();
-            renderRules();
+            saveRules().then(renderRules);
         });
 
         $rulesContainer.append($rule);
+    });
+
+    rulesets.every(rule => {
+        if (!rule.enabled) {
+            $("#disabled-rules-alert").show();
+            return false;
+        }
+        return true;
     });
 }
 
@@ -227,8 +226,7 @@ $(function () {
 
     $('#reset-rules-btn').click(function () {
         if (confirm('Reset rules?')) {
-            resetRules();
-            renderRules();
+            resetRules().then(renderRules);
         }
     });
 
@@ -262,8 +260,9 @@ $(function () {
         }
         $ruleModal.modal('hide');
         rulesets.unshift(rule);
-        saveRules();
-        renderRules(0);
+        saveRules().then(async function() {
+            await renderRules(0);
+        });
     });
     // import rules modal
     var $importRulesModal = $('#importRulesFromTextModal');
@@ -293,8 +292,7 @@ $(function () {
         } else {
             rulesets = rulesets.concat(rules);
         }
-        saveRules();
-        renderRules();
+        saveRules().then(renderRules);
     });
     var reader = new FileReader();
     reader.onload = function () {
@@ -319,10 +317,12 @@ $(function () {
 
     $('h1 small').text('version ' + chrome.runtime.getManifest().version);
 
-    if (localStorage.getItem('showChangelog')) {
-        $('#newBadge').show();
-        localStorage.removeItem('showChangelog');
-    }
+    chrome.storage.local.get(['showChangelog'], ({ showChangelog }) => {
+        if (showChangelog) {
+            $('#newBadge').show();
+            chrome.storage.local.remove('showChangelog');
+        }
+    });
 
     renderRules();
 });

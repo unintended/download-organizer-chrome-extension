@@ -1,10 +1,10 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_appName__",
   "short_name": "REDownloadOrganizer",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "options_page": "options.html",
   "homepage_url": "https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg",
   "icons": {
@@ -15,10 +15,11 @@
   },
   "permissions": [
     "downloads",
-    "storage"
+    "storage",
+    "offscreen"
   ],
   "background": {
-    "scripts": ["manager.js", "js/moment.min.js"],
-    "persistent": false
+    "service_worker": "manager.js",
+    "type": "module"
   }
 }
