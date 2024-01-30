@@ -1,3 +1,5 @@
+import moment from './js/moment-es.js';
+
 const EXT_MIME_MAPPINGS = {
     'mp3': 'audio/mpeg',
     'pdf': 'application/pdf',

@@ -1,3 +1,5 @@
+import moment from './js/moment-es.js';
+
 const RULE_FIELDS = ['mime', 'referrer', 'url', 'finalUrl', 'filename'];
 
 const DEFAULT_RULES = [
