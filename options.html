@@ -110,8 +110,8 @@
             <div class="panel-group" id="rules-container">
 
             </div>
-            
-            <!-- 
+
+            <!--
             <form class="form-horizontal" role="form">
                 <div class="form-group form-group-sm">
                     <label class="control-label col-sm-9">Default name conflict action:</label>
@@ -120,7 +120,7 @@
                             <option value="uniquify">Uniquify</option>
                             <option value="overwrite">Overwrite</option>
                             <option value="prompt">Prompt</option>
-                        </select>   
+                        </select>
                     </div>
                 </div>
             </form> -->
@@ -222,6 +222,24 @@
                         symbolic links to circumvent this limitation.
                     </p>
 
+                    <h4>Name conflict action</h4>
+
+                    <p>You can choose how files with conflicting filenames are handled in one of three different ways:
+                        <ol>
+                            <li>
+                                <strong>Uniquify</strong> - if the file exists it will append "(1)" to the filename.
+                                ex. if "MyImage.jpg" exists, it will save the file as "MyImage (1).jpg" then "(2)" and 
+                                so on.
+                            </li>
+                            <li>
+                                <strong>Overwrite</strong> - if the file exists it will overwrite the existing file.
+                            </li>
+                            <li>
+                                <strong>Prompt</strong> - if the file exists it will bring up the file prompt.
+                            </li>
+                        </ol>
+                    </p>
+
                     <h4>RegExp cheatsheet</h4>
 
                     <p>
@@ -248,7 +266,7 @@
 
                     <h4>Date formatter</h4>
                     <p>
-                        You can add a special <code>date</code> placeholder into destination path to organize downloads by date and/or time. 
+                        You can add a special <code>date</code> placeholder into destination path to organize downloads by date and/or time.
                         There are some most useful examples:
                         <ul>
                             <li><code>${date}</code> → <code id="date-example-date" class="date-format-example" data-value="YYYY-MM-DD">2018-11-18</code></li>
@@ -263,8 +281,8 @@
 
                     <h4>Overriding file extensions</h4>
                     <p>
-                        It's not possible to override extensions for known MIME-types because of the Chrome API limitations. 
-                        However, as a workaround you can use 3rd-party extensions to modify the response headers for the urls you download, 
+                        It's not possible to override extensions for known MIME-types because of the Chrome API limitations.
+                        However, as a workaround you can use 3rd-party extensions to modify the response headers for the urls you download,
                         changing the <code>Content-Type</code> header to some unexpected MIME-type, e.g. <code>application/x-unknown-mime-type</code>.
                         Then you will be able to create a rule with a custom file extension in <b>destination path</b>.
                     </p>
@@ -485,7 +503,7 @@
                         </div>
                     </div>
                     <div class="form-group form-group-sm has-feedback">
-                        <label class="control-label col-sm-3" 
+                        <label class="control-label col-sm-3"
                                title="File download URL after all redirects">Final download URL:</label>
 
                         <div class="col-sm-9">
@@ -538,7 +556,7 @@
                                 <option value="uniquify">Uniquify</option>
                                 <option value="overwrite">Overwrite</option>
                                 <option value="prompt">Prompt ("Save as..")</option>
-                            </select>   
+                            </select>
                         </div>
                     </div>
 
