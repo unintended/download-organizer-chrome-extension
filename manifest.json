@@ -15,8 +15,9 @@
   },
   "permissions": [
     "downloads",
+    "offscreen",
     "storage",
-    "offscreen"
+    "tabs"
   ],
   "background": {
     "service_worker": "manager.js",

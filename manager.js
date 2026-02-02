@@ -11,18 +11,25 @@ const EXT_MIME_MAPPINGS = {
     'torrent': 'application/x-bittorrent'
 };
 
-const RULE_FIELDS = ['mime', 'referrer', 'url', 'finalUrl', 'filename'];
+const RULE_FIELDS = ['mime', 'tabUrl', 'referrer', 'url', 'finalUrl', 'filename'];
 const DATE_FIELD = 'date';
 const DEFAULT_CONFLICT_ACTION = 'uniquify';
 
-chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, suggest) {
+async function getActiveTabUrl() {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    return tab?.url
+}
 
+chrome.downloads.onDeterminingFilename.addListener( function (downloadItem, suggest) {
     console.log("Downloading item %o", downloadItem);
 
-    chrome.storage.local.get(['rulesets'], ({ rulesets }) => {
+    chrome.storage.local.get(['rulesets'], async ({ rulesets }) => {
+        const tabUrl = await getActiveTabUrl()
+
         var item = {
             'mime': downloadItem.mime,
             'referrer': decodeURI(downloadItem.referrer),
+            'tabUrl': tabUrl,
             'url': decodeURI(downloadItem.url),
             'finalUrl': decodeURI(downloadItem.finalUrl),
             'filename': downloadItem.filename,
@@ -40,7 +47,7 @@ chrome.downloads.onDeterminingFilename.addListener(function (downloadItem, sugge
         }
 
         var suggestion = undefined;
-    
+
         rulesets.every(function (rule) {
             if (!rule.enabled) {
                 console.log("Rule disabled: %o", rule);
