@@ -1,6 +1,6 @@
 import moment from './js/moment-es.js';
 
-const RULE_FIELDS = ['mime', 'referrer', 'url', 'finalUrl', 'filename'];
+const RULE_FIELDS = ['mime', 'tabUrl', 'referrer', 'url', 'finalUrl', 'filename'];
 
 const DEFAULT_RULES = [
     { "description": "Windows installers and applications (.exe and .msi files)", "mime": "application/(x-msdownload|x-ms-installer|x-msi|exe)", "pattern": "installers/", "enabled": true },

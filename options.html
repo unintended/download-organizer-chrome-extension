@@ -47,6 +47,9 @@
         .label-mime {
             background-color: #428bca;
         }
+        .label-tabUrl {
+            background-color: #428bca;
+        }
         .label-url {
             background-color: #428bca;
         }
@@ -492,6 +495,16 @@
                                    placeholder="E.g. image/jpeg"
                                    data-toggle="tooltip" data-placement="right" data-container="body"
                                    title="Feel free to use 'or' operation (e.g. image/jpeg|image/png) and regexp rules (e.g. image/.*) to handle multiple types"/>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="control-label col-sm-3">Tab&nbsp;URL:</label>
+
+                        <div class="col-sm-9 has-feedback">
+                            <input data-field="tabUrl" class="form-control" type="text"
+                                   placeholder="E.g. .*\.instagram\.com.*"
+                                   data-toggle="tooltip" data-placement="right" data-container="body"
+                                   title="Will match the current page's URL"/>
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
