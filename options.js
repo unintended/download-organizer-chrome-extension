@@ -44,6 +44,23 @@ async function syncRulesFromCloud() {
     await renderRules();
 }
 
+function hasEnabledTabUrlRules() {
+    return rulesets.some(function (rule) {
+        return rule.enabled !== false && rule.tabUrl;
+    });
+}
+
+async function updateTabUrlPermissionAlert() {
+    var hasTabUrlRules = hasEnabledTabUrlRules();
+    var hasPermission = await chrome.permissions.contains({ permissions: ['tabs'] });
+    var $alert = $('#taburl-permission-alert');
+    if (hasTabUrlRules && !hasPermission) {
+        $alert.collapse('show');
+    } else {
+        $alert.collapse('hide');
+    }
+}
+
 async function renderRules(openIdx) {
     var $rulesContainer = $('#rules-container');
     $rulesContainer.empty();
@@ -191,6 +208,8 @@ async function renderRules(openIdx) {
         }
         return true;
     });
+
+    await updateTabUrlPermissionAlert();
 }
 
 function showRuleShareModal(rule) {
@@ -327,6 +346,17 @@ $(function () {
     });
 
     renderRules();
+
+    $('#request-tabs-permission-btn').click(async function () {
+        try {
+            var granted = await chrome.permissions.request({ permissions: ['tabs'] });
+            if (granted) {
+                await updateTabUrlPermissionAlert();
+            }
+        } catch (err) {
+            console.error('Failed to request tabs permission:', err);
+        }
+    });
 });
 
 $(function () {

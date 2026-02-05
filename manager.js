@@ -15,9 +15,22 @@ const RULE_FIELDS = ['mime', 'tabUrl', 'referrer', 'url', 'finalUrl', 'filename'
 const DATE_FIELD = 'date';
 const DEFAULT_CONFLICT_ACTION = 'uniquify';
 
+async function hasTabsPermission() {
+    return chrome.permissions.contains({ permissions: ['tabs'] });
+}
+
 async function getActiveTabUrl() {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    return tab?.url
+    const hasPermission = await hasTabsPermission();
+    if (!hasPermission) {
+        return null;
+    }
+    try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        return tab?.url ?? null;
+    } catch (err) {
+        console.warn('Failed to get active tab URL:', err);
+        return null;
+    }
 }
 
 chrome.downloads.onDeterminingFilename.addListener( function (downloadItem, suggest) {
@@ -60,6 +73,11 @@ chrome.downloads.onDeterminingFilename.addListener( function (downloadItem, sugg
                 if (!rule[field]) {
                     substitutions[field] = [item[field]];
                     return true; // skip this and continue to the next field
+                }
+
+                // tabUrl requires tabs permission; without it we cannot match
+                if (field === 'tabUrl' && (item[field] == null || item[field] === '')) {
+                    return false;
                 }
     
                 var regex = new RegExp(rule[field], 'i');

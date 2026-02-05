@@ -110,6 +110,12 @@
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 Please note that some rules are disabled and will not apply until you enable them. Tick a checkbox on the right side of a rule to enable it.
             </div>
+            <div id="taburl-permission-alert" class="alert alert-warning collapse">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Tab URL permission required.</strong> Some rules use Tab URL matcher but the extension does not have permission to access tabs and history. These rules will not match until you grant the permission.
+                <br><br>
+                <button id="request-tabs-permission-btn" type="button" class="btn btn-primary btn-sm">Grant Tab URL permission</button>
+            </div>
             <div class="panel-group" id="rules-container">
 
             </div>
@@ -291,6 +297,11 @@
                     </p>
                 </div>
                 <div class="tab-pane" id="tab-changelog">
+                    <h4>Version 0.5.1</h4>
+                    <ul>
+                        <li>Tab URL matcher now uses optional tabs permission</li>
+                        <li>Warning and permission request button when rules use Tab URL but permission not granted</li>
+                    </ul>
                     <h4>Version 0.5.0</h4>
                     <ul>
                         <li>Support current tab url matcher</li>
