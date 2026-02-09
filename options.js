@@ -55,9 +55,9 @@ async function updateTabUrlPermissionAlert() {
     var hasPermission = await chrome.permissions.contains({ permissions: ['tabs'] });
     var $alert = $('#taburl-permission-alert');
     if (hasTabUrlRules && !hasPermission) {
-        $alert.collapse('show');
+        $alert.show();
     } else {
-        $alert.collapse('hide');
+        $alert.hide();
     }
 }
 
