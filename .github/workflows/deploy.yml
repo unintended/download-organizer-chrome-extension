@@ -1,0 +1,133 @@
+name: Deploy to Chrome Web Store
+
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Extract version from tag
+      id: version
+      run: |
+        if [[ $GITHUB_REF == refs/tags/v* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+        elif [[ $GITHUB_REF == refs/heads/* ]]; then
+          VERSION=$(node -p "require('./package.json').version")
+        else
+          VERSION="dev-$(date +%Y%m%d%H%M%S)"
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "📦 Version: $VERSION"
+        
+    - name: Update version in files
+      run: |
+        VERSION="${{ steps.version.outputs.version }}"
+        
+        # Update package.json version
+        npm version $VERSION --no-git-tag-version
+        
+        # Update manifest.json version
+        node -e "
+          const fs = require('fs');
+          const manifest = JSON.parse(fs.readFileSync('src/manifest.json', 'utf8'));
+          manifest.version = '$VERSION';
+          fs.writeFileSync('src/manifest.json', JSON.stringify(manifest, null, 2));
+          console.log('✅ Updated manifest.json to version $VERSION');
+        "
+        
+    - name: Build extension
+      run: npm run build
+      
+    - name: Create extension package
+      run: npm run zip
+      
+    - name: Verify package
+      run: |
+        if [ ! -f *.zip ]; then
+          echo "❌ ZIP file not found"
+          exit 1
+        fi
+        
+        ZIP_FILE=$(ls *.zip | head -1)
+        echo "📦 Extension package: $ZIP_FILE"
+        echo "📊 Package size: $(du -h $ZIP_FILE | cut -f1)"
+        
+        # Verify ZIP contents
+        unzip -l $ZIP_FILE | grep -E "(manifest.json|manager.js|options.js)" || {
+          echo "❌ Required files missing from ZIP"
+          exit 1
+        }
+        
+        echo "extension_package=$ZIP_FILE" >> $GITHUB_ENV
+        
+    - name: Upload to Chrome Web Store
+      uses: mobilefirstllc/cws-publish@latest
+      with:
+        action: 'upload'
+        client_id: ${{ secrets.CHROME_CLIENT_ID }}
+        client_secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+        refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+        extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
+        zip_file: ${{ env.extension_package }}
+        
+    - name: Publish to Chrome Web Store
+      uses: mobilefirstllc/cws-publish@latest
+      with:
+        action: 'publish'
+        client_id: ${{ secrets.CHROME_CLIENT_ID }}
+        client_secret: ${{ secrets.CHROME_CLIENT_SECRET }}  
+        refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+        extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
+        
+    - name: Create GitHub release assets
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ${{ env.extension_package }}
+        body: |
+          🚀 **Chrome Extension Release v${{ steps.version.outputs.version }}**
+          
+          This extension has been automatically built and published to the Chrome Web Store.
+          
+          📦 **Installation:**
+          - [Chrome Web Store](https://chrome.google.com/webstore/detail/regexp-download-organizer/${{ secrets.CHROME_EXTENSION_ID }})
+          - Manual: Download the ZIP file below and load as unpacked extension
+          
+          🔧 **Changes:**
+          See commit history for detailed changes.
+          
+          ⚙️ **Technical Details:**
+          - Built with Node.js ${{ matrix.node-version || '20' }}
+          - TypeScript compilation with type checking
+          - Automated CI/CD deployment
+          
+          ---
+          *This release was automatically created by GitHub Actions*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Notify deployment success
+      run: |
+        echo "🎉 Successfully deployed to Chrome Web Store!"
+        echo "📦 Version: ${{ steps.version.outputs.version }}"
+        echo "🔗 Extension: https://chrome.google.com/webstore/detail/regexp-download-organizer/${{ secrets.CHROME_EXTENSION_ID }}"
+        echo "📊 Package: ${{ env.extension_package }}"

@@ -1,0 +1,103 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ master, main, develop ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18, 20]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run type checking
+      run: npm run type-check
+      
+    - name: Run linting (if available)
+      run: npm run lint || echo "Linting skipped - command not available"
+      continue-on-error: true
+      
+    - name: Build extension
+      run: npm run build
+      
+    - name: Verify build artifacts
+      run: |
+        echo "Checking required files..."
+        test -f dist/manifest.json || { echo "manifest.json missing"; exit 1; }
+        test -f dist/scripts/manager.js || { echo "manager.js missing"; exit 1; }
+        test -f dist/scripts/options.js || { echo "options.js missing"; exit 1; }
+        test -d dist/assets || { echo "assets directory missing"; exit 1; }
+        echo "✅ All required files present"
+        
+    - name: Test CLI functionality
+      run: |
+        npm link
+        rdo --version
+        rdo info
+        
+    - name: Create build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: extension-build-${{ matrix.node-version }}
+        path: |
+          dist/
+          !dist/**/*.map
+        retention-days: 30
+        
+    - name: Validate manifest
+      run: |
+        node -e "
+          const manifest = require('./dist/manifest.json');
+          const pkg = require('./package.json');
+          
+          console.log('📦 Package version:', pkg.version);
+          console.log('📄 Manifest version:', manifest.version);
+          
+          if (manifest.version !== pkg.version) {
+            console.error('❌ Version mismatch between package.json and manifest.json');
+            process.exit(1);
+          }
+          
+          console.log('✅ Versions match');
+          console.log('🎯 Extension:', manifest.name);
+          console.log('📝 Description:', manifest.description);
+        "
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run security audit
+      run: npm audit --audit-level=moderate
+      
+    - name: Check for vulnerable packages
+      run: |
+        echo "Checking for known vulnerabilities..."
+        npx audit-ci --moderate

@@ -25,6 +25,21 @@ const COMMANDS = {
   format: 'Format code with Prettier',
   'type-check': 'Run TypeScript type checking',
   validate: 'Run type-check and lint',
+  ci: 'Run complete CI pipeline locally',
+  'ci-test': 'Test CI pipeline with CLI validation',
+  
+  // Release & CI/CD commands
+  'prepare-release': 'Prepare release package with version sync',
+  'release-patch': 'Bump patch version and prepare release',
+  'release-minor': 'Bump minor version and prepare release', 
+  'release-major': 'Bump major version and prepare release',
+  'create-tag': 'Create and push git tag for current version',
+  'deploy-check': 'Verify deployment readiness',
+  'simulate-ci': 'Simulate complete CI pipeline locally',
+  'check-workflows': 'Verify GitHub Actions workflow files exist',
+  'workflow-status': 'Show recent GitHub Actions workflow runs',
+  'view-ci': 'Show CI workflow runs',
+  'view-deploy': 'Show deployment workflow runs',
   
   // Information commands
   info: 'Show comprehensive project information',
@@ -47,6 +62,7 @@ const COMMANDS = {
   'sync-version': 'Sync version between package.json and manifest.json',
   release: 'Build and package for release',
   zip: 'Create distribution ZIP file',
+  'pre-commit': 'Run pre-commit checks (format + validate)',
   
   // Custom CLI commands
   init: 'Initialize a new extension project here',
@@ -77,6 +93,19 @@ Usage: regexp-download-organizer <command> [options]
   format        ${COMMANDS.format}
   type-check    ${COMMANDS['type-check']}
   validate      ${COMMANDS.validate}
+  ci            ${COMMANDS.ci}
+  ci-test       ${COMMANDS['ci-test']}
+
+🚀 Release & CI/CD:
+  prepare-release ${COMMANDS['prepare-release']}
+  release-patch   ${COMMANDS['release-patch']}
+  release-minor   ${COMMANDS['release-minor']}
+  release-major   ${COMMANDS['release-major']}
+  create-tag      ${COMMANDS['create-tag']}
+  deploy-check    ${COMMANDS['deploy-check']}
+  simulate-ci     ${COMMANDS['simulate-ci']}
+  check-workflows ${COMMANDS['check-workflows']}
+  workflow-status ${COMMANDS['workflow-status']}
 
 📊 Info Commands:
   info          ${COMMANDS.info}
@@ -99,6 +128,7 @@ Usage: regexp-download-organizer <command> [options]
   sync-version  ${COMMANDS['sync-version']}
   release       ${COMMANDS.release}
   zip           ${COMMANDS.zip}
+  pre-commit    ${COMMANDS['pre-commit']}
 
 🚀 CLI Extensions:
   init          ${COMMANDS.init}
@@ -108,6 +138,8 @@ Usage: regexp-download-organizer <command> [options]
 Examples:
   regexp-download-organizer build          # Build the extension
   regexp-download-organizer proto          # Quick build and test
+  regexp-download-organizer ci             # Run CI pipeline locally  
+  regexp-download-organizer release-patch  # Bump version and prepare release
   regexp-download-organizer info           # Show project info
   regexp-download-organizer help           # View documentation
   

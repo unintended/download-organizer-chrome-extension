@@ -23,6 +23,8 @@ See [Development Guide](docs/DEVELOPMENT.md) for setting up the development envi
 
 **CLI Documentation**: See [CLI Guide](docs/CLI.md) for complete command-line interface documentation.
 
+**CI/CD Pipeline**: See [CI/CD Guide](docs/CICD.md) for automated Chrome Web Store deployment setup.
+
 ### Quick Commands
 
 ```bash
@@ -32,6 +34,13 @@ npm run dev           # Development watch mode
 npm run help          # View help documentation
 npm run about         # About this extension
 npm run changelog     # Version history
+
+# CI/CD Commands (New!)
+npm run ci            # Run CI pipeline locally
+npm run simulate-ci   # Full CI simulation  
+npm run release-patch # Bump version and prepare release
+npm run setup-cicd    # Setup Chrome Web Store deployment
+npm run deploy-check  # Verify deployment readiness
 ```
 
 ### CLI Usage
