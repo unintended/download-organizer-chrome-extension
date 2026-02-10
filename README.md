@@ -17,6 +17,9 @@ npm install -g regexp-download-organizer
 rdo --help
 ```
 
+**VS Code Integration (recommended for development):**
+Open `download-organizer-chrome-extension.code-workspace` in VS Code for the complete development environment with integrated tasks, debugging, and CI/CD. See [Workspace Guide](docs/WORKSPACE.md) for details.
+
 ## 🔧 Development
 
 See [Development Guide](docs/DEVELOPMENT.md) for setting up the development environment.

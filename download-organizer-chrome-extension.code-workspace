@@ -1,4 +1,24 @@
 {
+	// =====================================================
+	// 📦 RegExp Download Organizer - VS Code Workspace  
+	// =====================================================
+	// 
+	// This workspace is configured for professional Chrome extension
+	// development with comprehensive TypeScript, CI/CD, and deployment
+	// tooling integration.
+	//
+	// 🚀 Quick Start:
+	//   - Press Ctrl+Shift+P → "Tasks: Run Task" to see all available tasks
+	//   - Press Ctrl+Shift+B to build the extension
+	//   - Press Ctrl+Shift+T to run CI pipeline
+	//   - Press F5 to debug in Chrome
+	// 
+	// 📖 Documentation:
+	//   - CLI Guide: docs/CLI.md
+	//   - CI/CD Setup: docs/CICD.md  
+	//   - Development: docs/DEVELOPMENT.md
+	//
+	// =====================================================
 	"folders": [
 		{
 			"path": ".",
@@ -84,7 +104,29 @@
 		
 		// Git settings
 		"git.ignoreLimitWarning": true,
-		"scm.defaultViewMode": "tree"
+		"scm.defaultViewMode": "tree",
+		
+		// CI/CD and workflow settings
+		"yaml.schemas": {
+			"https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+		},
+		"files.associations": {
+			"*.yml": "yaml",
+			"*.yaml": "yaml"
+		},
+		
+		// Task and terminal settings for CI/CD
+		"terminal.integrated.allowMnemonics": true,
+		"task.allowAutomaticTasks": "on",
+		"task.quickOpen.history": 20,
+		
+		// GitHub Copilot settings for workflow development
+		"github.copilot.enable": {
+			"*": true,
+			"yaml": true,
+			"json": true,
+			"jsonc": true
+		}
 	},
 	"extensions": {
 		"recommendations": [
@@ -98,6 +140,11 @@
 			"esbenp.prettier-vscode",
 			"dbaeumer.vscode-eslint",
 			
+			// CI/CD and workflow development
+			"github.vscode-github-actions",
+			"ms-vscode.vscode-yaml",
+			"redhat.vscode-yaml",
+			
 			// Productivity
 			"bradlc.vscode-tailwindcss",
 			"formulahendry.auto-rename-tag",
@@ -106,10 +153,11 @@
 			
 			// JSON/Manifest editing
 			"ms-vscode.jsonc",
-			"quicktype.quicktype",
+			"quicktype.quicktype", 
 			
 			// Git integration
 			"eamodio.gitlens",
+			"github.vscode-pull-request-github",
 			
 			// File icons
 			"vscode-icons-team.vscode-icons",
@@ -118,12 +166,17 @@
 			"ms-vscode.js-debug",
 			
 			// Documentation
-			"yzhang.markdown-all-in-one"
+			"yzhang.markdown-all-in-one",
+			
+			// GitHub integration
+			"github.copilot",
+			"github.copilot-chat"
 		]
 	},
 	"tasks": {
 		"version": "2.0.0",
 		"tasks": [
+			// ❯❯❯ 🏗️ BUILD TASKS ❮❮❮
 			{
 				"type": "npm",
 				"script": "build",
@@ -201,6 +254,297 @@
 					"command": "open",
 					"args": ["-a", "Google Chrome", "chrome://extensions/"]
 				}
+			},
+			// =====================================================
+			// 🚀 CI/CD & Release Management Tasks
+			// =====================================================
+			{
+				"type": "npm",
+				"script": "ci",
+				"group": "test", 
+				"label": "🔄 Run CI Pipeline",
+				"detail": "Execute complete CI pipeline locally",
+				"problemMatcher": ["$tsc"],
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": true,
+					"panel": "shared",
+					"showReuseMessage": true,
+					"clear": true
+				}
+			},
+			{
+				"type": "npm",
+				"script": "simulate-ci",
+				"group": "test",
+				"label": "🧪 Simulate Full CI",
+				"detail": "Simulate complete CI pipeline with clean install",
+				"presentation": {
+					"echo": true,
+					"reveal": "always", 
+					"focus": true,
+					"panel": "dedicated",
+					"showReuseMessage": false,
+					"clear": true
+				}
+			},
+			{
+				"type": "npm",
+				"script": "deploy-check",
+				"group": "test",
+				"label": "✅ Deployment Check",
+				"detail": "Verify project is ready for deployment",
+				"presentation": {
+					"echo": true,
+					"reveal": "silent",
+					"focus": false
+				}
+			},
+			{
+				"type": "npm",
+				"script": "sync-version",
+				"group": "build",
+				"label": "🔄 Sync Versions",
+				"detail": "Synchronize package.json and manifest.json versions"
+			},
+			{
+				"type": "npm",
+				"script": "release-patch",
+				"group": "build",
+				"label": "📈 Release Patch",
+				"detail": "Bump patch version and prepare release",
+				"problemMatcher": [],
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": true,
+					"panel": "shared"
+				}
+			},
+			{
+				"type": "npm", 
+				"script": "release-minor",
+				"group": "build",
+				"label": "🚀 Release Minor",
+				"detail": "Bump minor version and prepare release",
+				"problemMatcher": [],
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": true,
+					"panel": "shared"
+				}
+			},
+			{
+				"type": "npm",
+				"script": "release-major", 
+				"group": "build",
+				"label": "🎯 Release Major",
+				"detail": "Bump major version and prepare release",
+				"problemMatcher": [],
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": true,
+					"panel": "shared"
+				}
+			},
+			{
+				"type": "npm",
+				"script": "create-tag",
+				"group": "build",
+				"label": "🏷️ Create Git Tag",
+				"detail": "Create and push git tag for current version"
+			},
+			// =====================================================
+			// 📊 Information & Monitoring Tasks  
+			// =====================================================
+			{
+				"type": "npm",
+				"script": "info",
+				"group": "test",
+				"label": "📋 Project Info",
+				"detail": "Show comprehensive project information",
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared"
+				}
+			},
+			{
+				"type": "npm",
+				"script": "version-info",
+				"group": "test",
+				"label": "📊 Version Info", 
+				"detail": "Show version information and compatibility"
+			},
+			{
+				"type": "npm",
+				"script": "project-stats",
+				"group": "test",
+				"label": "📈 Project Stats",
+				"detail": "Show project file statistics and metrics"
+			},
+			{
+				"type": "npm",
+				"script": "check-workflows",
+				"group": "test",
+				"label": "⚙️ Check Workflows",
+				"detail": "Verify GitHub Actions workflow files exist"
+			},
+			{
+				"type": "npm",
+				"script": "workflow-status",
+				"group": "test", 
+				"label": "📡 Workflow Status",
+				"detail": "Show recent GitHub Actions workflow runs"
+			},
+			// =====================================================
+			// 🛠️ Setup & Configuration Tasks
+			// ===================================================== 
+			{
+				"type": "npm",
+				"script": "setup-cicd",
+				"group": "build",
+				"label": "🔧 Setup CI/CD",
+				"detail": "Configure Chrome Web Store deployment",
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": true,
+					"panel": "dedicated",
+					"showReuseMessage": false
+				}
+			},
+			{
+				"type": "npm",
+				"script": "setup-chrome-api",
+				"group": "build",
+				"label": "🌐 Setup Chrome API",
+				"detail": "Interactive Chrome Web Store API setup",
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": true,
+					"panel": "dedicated",
+					"showReuseMessage": false
+				}
+			},
+			{
+				"type": "npm",
+				"script": "pre-commit",
+				"group": "test",
+				"label": "✨ Pre-commit",
+				"detail": "Run pre-commit checks (format + validate)",
+				"problemMatcher": ["$tsc"]
+			},
+			// =====================================================
+			// 📖 Documentation Tasks
+			// =====================================================
+			{
+				"type": "npm", 
+				"script": "help",
+				"group": "test",
+				"label": "📖 Help Guide",
+				"detail": "Show help documentation",
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared"
+				}
+			},
+			{
+				"type": "npm",
+				"script": "about",
+				"group": "test", 
+				"label": "ℹ️ About Extension",
+				"detail": "Show about information",
+				"presentation": {
+					"echo": true,
+					"reveal": "always", 
+					"focus": false,
+					"panel": "shared"
+				}
+			},
+			{
+				"type": "npm",
+				"script": "changelog",
+				"group": "test",
+				"label": "📝 Changelog",
+				"detail": "Show version history",
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false, 
+					"panel": "shared"
+				}
+			},
+			// =====================================================
+			// 🔗 External Links Tasks
+			// =====================================================
+			{
+				"type": "npm",
+				"script": "webstore", 
+				"group": "test",
+				"label": "🏪 Chrome Web Store",
+				"detail": "Open Chrome Web Store page"
+			},
+			{
+				"type": "npm",
+				"script": "github",
+				"group": "test",
+				"label": "🐙 GitHub Repository", 
+				"detail": "Open GitHub repository"
+			},
+			{
+				"type": "npm",
+				"script": "issues",
+				"group": "test",
+				"label": "🐛 Report Issues",
+				"detail": "Open GitHub issues page"
+			},
+			// =====================================================
+			// 🎛️ Advanced Development Tasks
+			// =====================================================
+			{
+				"type": "npm",
+				"script": "debug", 
+				"group": "test",
+				"label": "🔍 Debug Instructions",
+				"detail": "Show extension debugging guide",
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared"
+				}
+			},
+			{
+				"type": "shell",
+				"command": "code",
+				"args": ["docs/CICD.md"],
+				"group": "test",
+				"label": "📚 CI/CD Documentation",
+				"detail": "Open CI/CD setup and usage guide"
+			},
+			{
+				"type": "shell",
+				"command": "code",
+				"args": ["docs/CLI.md"],
+				"group": "test", 
+				"label": "💻 CLI Documentation",
+				"detail": "Open CLI usage guide"
+			},
+			{
+				"type": "shell",
+				"command": "code",
+				"args": [".github/workflows/"],
+				"group": "test",
+				"label": "⚙️ Edit Workflows",
+				"detail": "Open GitHub Actions workflow files"
 			}
 		]
 	},
@@ -238,6 +582,87 @@
 				"url": "chrome-extension://extension-id/options.html",
 				"webRoot": "${workspaceFolder}/dist",
 				"sourceMaps": true
+			}
+		]
+	},
+	"keybindings": {
+		"version": "1.0.0",
+		"keybindings": [
+			// Quick build and development
+			{
+				"key": "ctrl+shift+b",
+				"command": "workbench.action.tasks.runTask",
+				"args": "🔨 Build Extension"
+			},
+			{
+				"key": "ctrl+shift+w",
+				"command": "workbench.action.tasks.runTask", 
+				"args": "👀 Watch Mode"
+			},
+			{
+				"key": "ctrl+shift+t",
+				"command": "workbench.action.tasks.runTask",
+				"args": "🔄 Run CI Pipeline"
+			},
+			// Quality and formatting
+			{
+				"key": "ctrl+shift+l",
+				"command": "workbench.action.tasks.runTask",
+				"args": "🔍 Lint Code"
+			},
+			{
+				"key": "ctrl+shift+f",
+				"command": "workbench.action.tasks.runTask",
+				"args": "✨ Format Code"
+			},
+			{
+				"key": "ctrl+shift+p ctrl+shift+c",
+				"command": "workbench.action.tasks.runTask",
+				"args": "✨ Pre-commit"
+			},
+			// Release management
+			{
+				"key": "ctrl+shift+r ctrl+shift+p", 
+				"command": "workbench.action.tasks.runTask",
+				"args": "📈 Release Patch"
+			},
+			{
+				"key": "ctrl+shift+r ctrl+shift+m",
+				"command": "workbench.action.tasks.runTask", 
+				"args": "🚀 Release Minor"
+			},
+			// Information and monitoring
+			{
+				"key": "ctrl+shift+i",
+				"command": "workbench.action.tasks.runTask",
+				"args": "📋 Project Info"
+			},
+			{
+				"key": "ctrl+shift+v",
+				"command": "workbench.action.tasks.runTask",
+				"args": "📊 Version Info"
+			},
+			// Testing and validation
+			{
+				"key": "ctrl+shift+d",
+				"command": "workbench.action.tasks.runTask",
+				"args": "✅ Deployment Check"
+			},
+			{
+				"key": "ctrl+shift+s",
+				"command": "workbench.action.tasks.runTask",
+				"args": "🧪 Simulate Full CI"
+			},
+			// Quick access to external resources
+			{
+				"key": "ctrl+shift+g",
+				"command": "workbench.action.tasks.runTask",
+				"args": "🐙 GitHub Repository"
+			},
+			{
+				"key": "ctrl+shift+c ctrl+shift+e",
+				"command": "workbench.action.tasks.runTask",
+				"args": "🌐 Open Chrome Extensions"
 			}
 		]
 	}

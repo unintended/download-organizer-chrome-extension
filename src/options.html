@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +11,7 @@
 
     <style>
         .tooltip-inner {
-            max-width: 400px!important;
+            max-width: 400px !important;
         }
 
         .form-control::-moz-placeholder {
@@ -39,6 +40,7 @@
             padding-left: 1em;
             padding-right: 0.4em;
         }
+
         .title-container span.label {
             margin-right: 0.3em;
         }
@@ -46,28 +48,34 @@
         .label-mime {
             background-color: #428bca;
         }
+
         .label-tabUrl {
             background-color: #428bca;
         }
+
         .label-url {
             background-color: #428bca;
         }
+
         .label-referrer {
             background-color: #428bca;
         }
+
         .label-filename {
             background-color: #428bca;
         }
+
         .label-disabled {
             background-color: #aaa;
         }
 
-        input:not([type='file']),textarea.form-control {
+        input:not([type='file']),
+        textarea.form-control {
             font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
         }
 
         .form-control[readonly] {
-            cursor: text!important;
+            cursor: text !important;
         }
 
         .tab-content {
@@ -91,43 +99,49 @@
         }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <h1 class="page-header">Download rules
-        <small></small>
-    </h1>
+    <div class="container">
+        <h1 class="page-header">Download rules
+            <small></small>
+        </h1>
 
-    <div class="row">
-        <div class="col-sm-8">
-            <div id="main-toolbar" class="btn-toolbar">
-                <div class="btn-group pull-right">
-                    <button id="add-rule-btn" type="button" class="btn btn-success">
-                        <span class="glyphicon glyphicon-plus"></span> New rule
-                    </button>
-                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu" role="list">
-                        <li><a id="add-rule-from-text-btn" data-toggle="modal" data-target="#addRuleFromTextModal" href="#">New rule from text...</a></li>
-                    </ul>
+        <div class="row">
+            <div class="col-sm-8">
+                <div id="main-toolbar" class="btn-toolbar">
+                    <div class="btn-group pull-right">
+                        <button id="add-rule-btn" type="button" class="btn btn-success">
+                            <span class="glyphicon glyphicon-plus"></span> New rule
+                        </button>
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="list">
+                            <li><a id="add-rule-from-text-btn" data-toggle="modal" data-target="#addRuleFromTextModal"
+                                    href="#">New rule from text...</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div id="disabled-rules-alert" class="alert alert-warning collapse">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                Please note that some rules are disabled and will not apply until you enable them. Tick a checkbox on the right side of a rule to enable it.
-            </div>
-            <div id="taburl-permission-alert" class="alert alert-warning collapse">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Tab URL permission required.</strong> Some rules use Tab URL matcher but the extension does not have permission to access tabs and history. These rules will not match until you grant the permission.
-                <br><br>
-                <button id="request-tabs-permission-btn" type="button" class="btn btn-primary btn-sm">Grant Tab URL permission</button>
-            </div>
-            <div class="panel-group" id="rules-container">
+                <div id="disabled-rules-alert" class="alert alert-warning collapse">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    Please note that some rules are disabled and will not apply until you enable them. Tick a checkbox
+                    on the right side of a rule to enable it.
+                </div>
+                <div id="taburl-permission-alert" class="alert alert-warning collapse">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Tab URL permission required.</strong> Some rules use Tab URL matcher but the extension does
+                    not have permission to access tabs and history. These rules will not match until you grant the
+                    permission.
+                    <br><br>
+                    <button id="request-tabs-permission-btn" type="button" class="btn btn-primary btn-sm">Grant Tab URL
+                        permission</button>
+                </div>
+                <div class="panel-group" id="rules-container">
 
-            </div>
+                </div>
 
-            <!--
+                <!--
             <form class="form-horizontal" role="form">
                 <div class="form-group form-group-sm">
                     <label class="control-label col-sm-9">Default name conflict action:</label>
@@ -140,306 +154,333 @@
                     </div>
                 </div>
             </form> -->
-            <div id="secondary-toolbar" class="btn-toolbar">
-                <div class="btn-group">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-export"></span>
-                        Export rules
-                        <span class="caret"></span>
+                <div id="secondary-toolbar" class="btn-toolbar">
+                    <div class="btn-group">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-export"></span>
+                            Export rules
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="list">
+                            <li><a id="export-rules-btn" href="#">Save to file</a></li>
+                            <li><a id="sync-rules-to-cloud-btn" href="#">Sync to cloud</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-import"></span>
+                            Import rules
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="list">
+                            <li><a id="import-rules-btn" href="#" data-toggle="modal"
+                                    data-target="#importRulesFromTextModal">Load from file...</a></li>
+                            <li><a id="sync-rules-from-cloud-btn" href="#">Sync from cloud</a></li>
+                        </ul>
+                    </div>
+                    <button id="reset-rules-btn" type="button" class="btn btn-danger pull-right">Reset rules...</button>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <ul id="tab-links" class="nav nav-tabs" role="tablist">
+                    <li class="active" role="presentation"><a href="#tab-help" role="tab" data-toggle="tab">Help</a>
+                    </li>
+                    <li role="presentation"><a href="#tab-changelog" role="tab" data-toggle="tab">Changelog <span
+                                id="newBadge" class="badge">New!</span></a></li>
+                    <li role="presentation"><a href="#tab-about" role="tab" data-toggle="tab">About</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-help">
+                        <h4>Download rules</h4>
+
+                        <p>The download rules are applied one by one whenever you start downloading a file. Each rule
+                            consists of matchers and a download path pattern.
+                            The matchers are actually a set of <i>regular expressions</i> that applied to the
+                            <b>filetype</b>, <b>URL</b>,
+                            <b>referrer URL</b> and <b>filename</b> of the download item.
+                            If all of the non-empty mathers succeed for some rule, the file is renamed according to the
+                            download path pattern of this rule, the other rules are skipped.
+                        </p>
+
+                        <p>
+                            All the regular expressions are case-insensitive.
+                        </p>
+
+                        <h4>Matchers</h4>
+
+                        <p>You can use any <i>RegExp</i> constructions in the matchers (even the <i>capturing
+                                groups</i>).
+                        </p>
+
+                        <h4>MIME types</h4>
+                        MIME filetype is a text string that describes a format of a file. Check the following list of
+                        the most common MIME types:
+                        <dl class="dl-horizontal">
+                            <dt>application/pdf</dt>
+                            <dd>PDF documents</dd>
+                            <dt>application/zip</dt>
+                            <dd>Compressed archives</dd>
+                            <dt>application/x-bittorrent</dt>
+                            <dd>Torrent files</dd>
+                            <dt>application/exe</dt>
+                            <dd>Windows executable</dd>
+                            <dt>audio/mpeg</dt>
+                            <dd>MP3 files</dd>
+                            <dt>image/jpeg</dt>
+                            <dd>JPEG images</dd>
+                            <dt>image/png</dt>
+                            <dd>PNG images</dd>
+                        </dl>
+
+                        <h4>Examples</h4>
+                        <dl class="dl-horizontal">
+                            <dt>image/.*</dt>
+                            <dd>All images</dd>
+                            <dt>application/(zip|rar)</dt>
+                            <dd>Zip or rar archives</dd>
+                            <dt>.*</dt>
+                            <dd>Everything (catch-all)</dd>
+                        </dl>
+
+                        <h4>Download path patterns</h4>
+                        <p>Download path consists of forward-slash delimited folders (e.g. <em>my folder/my
+                                subfolder/</em>).
+                            You can also specify the exact filename at the end (e.g. <em>my folder/my
+                                file.zip</em>).
+                            And you can use <em>placeholders</em> as dynamic values in the path.</p>
+
+                        <h4>Placeholders</h4>
+                        <dl class="dl-horizontal">
+                            <dt>${filename}</dt>
+                            <dd>Original filename</dd>
+                            <dt>${url}</dt>
+                            <dd>Full download URL (before redirects)</dd>
+                            <dt>${finalUrl}</dt>
+                            <dd>Download URL after all redirects</dd>
+                            <dt>${referrer}</dt>
+                            <dd>Referrer URL</dd>
+                            <dt>${tabUrl}</dt>
+                            <dd>Current tab URL</dd>
+                            <dt>${mime}</dt>
+                            <dd>MIME type</dd>
+                            <dt>${date}</dt>
+                            <dd>Current date (YYYY-MM-DD format) or ${date:format} for
+                                custom formats</dd>
+                        </dl>
+                        <p>For ${date} placeholder you can use a date format as a parameter. E.g.: ${date:MMM DD, YYYY}
+                            or ${date:HH:mm}. You can use any format from the moment.js library.</p>
+
+                        <h5>Date format examples</h5>
+                        <dl class="dl-horizontal">
+                            <dt>YYYY-MM-DD</dt>
+                            <dd class="date-format-example" data-value="YYYY-MM-DD">-</dd>
+                            <dt>MM/DD/YYYY</dt>
+                            <dd class="date-format-example" data-value="MM/DD/YYYY">-</dd>
+                            <dt>MMM DD, YYYY</dt>
+                            <dd class="date-format-example" data-value="MMM DD, YYYY">-</dd>
+                            <dt>YYYY/MM</dt>
+                            <dd class="date-format-example" data-value="YYYY/MM">-</dd>
+                            <dt>HH:mm</dt>
+                            <dd class="date-format-example" data-value="HH:mm">-</dd>
+                        </dl>
+
+                        <h4>Capturing groups</h4>
+                        <p>
+                            If you use <i>capturing groups</i> (round brackets) in your <em>matchers</em>, you can reuse
+                            the matched groups in a <em>download path</em> by using
+                            <code>${field:1}</code>, <code>${field:2}</code>, etc. where <em>field</em> is a name of the
+                            matcher (<em>mime</em>, <em>referrer</em>, <em>url</em>, <em>finalUrl</em>, <em>tabUrl</em>
+                            or <em>filename</em>) and number is the index of the capturing group.
+                        </p>
+
+                        <h4>Examples</h4>
+                        <dl class="dl-horizontal">
+                            <dt>images/</dt>
+                            <dd>Put all downloads to 'images' folder. Original filename will be appended automatically.
+                            </dd>
+                            <dt>images/${filename}</dt>
+                            <dd>Put all downloads to 'images' folder. Same as above.</dd>
+                            <dt>downloads/${date:YYYY}/${date:MM}/</dt>
+                            <dd>Organize stuff by year and month.</dd>
+                            <dt>${referrer:1}/</dt>
+                            <dd>Create a folder based on the first capturing group of referrer pattern (e.g. domain
+                                name).</dd>
+                        </dl>
+
+                    </div>
+                    <div class="tab-pane" id="tab-changelog">
+                        <h4>Version 0.5.1</h4>
+                        <ul>
+                            <li>Tab URL matcher now uses optional tabs permission</li>
+                            <li>Warning and permission request button when rules use Tab URL but permission not granted
+                            </li>
+                        </ul>
+                        <h4>Version 0.5.0</h4>
+                        <ul>
+                            <li>Support current tab url matcher</li>
+                        </ul>
+                        <h4>Version 0.4.1</h4>
+                        <ul>
+                            <li>Fix bug with date formatting</li>
+                        </ul>
+                        <h4>Version 0.4.0</h4>
+                        <ul>
+                            <li>Support the latest requirements for Google Chrome Extensions and migrate to Manifest V3
+                            </li>
+                        </ul>
+                        <h4>Version 0.3.2</h4>
+                        <ul>
+                            <li>Support export to/from the cloud storage</li>
+                        </ul>
+                        <h4>Version 0.3.1</h4>
+                        <ul>
+                            <li>Added support for name conflict action</li>
+                        </ul>
+                        <h4>Version 0.3</h4>
+                        <ul>
+                            <li>Added support for <strong>Final URL</strong> (file download url after all redirects)
+                                field and corresponding <code>finalUrl</code> placeholder</li>
+                        </ul>
+                        <h4>Version 0.2.5</h4>
+                        <ul>
+                            <li>Fixed typo in predefined referrer rule (reset the rules if your referrer rule doesn't
+                                work)</li>
+                        </ul>
+                        <h4>Version 0.2.4.2</h4>
+                        <ul>
+                            <li>Fixed issue with multiple matchers in destination</li>
+                        </ul>
+                        <h4>Version 0.2.4</h4>
+                        <ul>
+                            <li>Added date/time formatter for destination</li>
+                            <li>Added human-friendly descriptions for rules</li>
+                            <li>Now it's possible to disable rules instead of deleting them</li>
+                            <li>More predefined rules</li>
+                        </ul>
+                        <h4>Version 0.2.3</h4>
+                        <ul>
+                            <li>Fixed issue with escaped URLs</li>
+                        </ul>
+                        <h4>Version 0.2.2</h4>
+                        <ul>
+                            <li>Lots of bugfixes</li>
+                            <li>Rule title redesign</li>
+                        </ul>
+                        <h4>Version 0.2</h4>
+                        <ul>
+                            <li>Added import and export of rulesets</li>
+                            <li>Added "Share rule" button</li>
+                            <li>Small bugfixes and UI improvements</li>
+                        </ul>
+                        <h4>Version 0.1</h4>
+                        <ul>
+                            <li>Initial version, basic functionality</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="tab-about">
+                        <h5><span class="about-heart">♥</span> Made with love to humans by robots~</h5>
+                        <p>Feel free to report any issues and feature requests or to join the development via our GitHub
+                            page</p>
+                        <ul>
+                            <li><a href="https://github.com/unintended/download-organizer-chrome-extension/issues"
+                                    target="_blank" rel="noopener noreferrer">Issue tracker</a></li>
+                            <li><a href="https://github.com/unintended/download-organizer-chrome-extension"
+                                    target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
+                            <li><a href="https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg"
+                                    target="_blank" rel="noopener noreferrer">Chrome web store (for likes)</a></li>
+                            <li><a href="LICENSE" target="_blank">License</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="showRuleFromTextModal" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="showModalRuleTextLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                     </button>
-                    <ul class="dropdown-menu" role="list">
-                        <li><a id="export-rules-btn" href="#">Save to file</a></li>
-                        <li><a id="sync-rules-to-cloud-btn" href="#">Sync to cloud</a></li>
-                    </ul>
+                    <h4 class="modal-title" id="showModalRuleTextLabel">Share rule</h4>
                 </div>
-                <div class="btn-group">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-import"></span>
-                        Import rules
-                        <span class="caret"></span>
+                <div class="modal-body">
+                    <p>You can copy the text below and share your rule to a friend. <br />
+                        To import a rule use "New rule from text..." button</p>
+                    <textarea class="form-control " rows="4" readonly></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="addRuleFromTextModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRuleTextLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                     </button>
-                    <ul class="dropdown-menu" role="list">
-                        <li><a id="import-rules-btn" href="#" data-toggle="modal" data-target="#importRulesFromTextModal">Load from file...</a></li>
-                        <li><a id="sync-rules-from-cloud-btn" href="#">Sync from cloud</a></li>
-                    </ul>
+                    <h4 class="modal-title" id="modalRuleTextLabel">New rule</h4>
                 </div>
-                <button id="reset-rules-btn" type="button" class="btn btn-danger pull-right">Reset rules...</button>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <ul id="tab-links" class="nav nav-tabs" role="tablist">
-                <li class="active" role="presentation"><a href="#tab-help" role="tab" data-toggle="tab">Help</a></li>
-                <li role="presentation"><a href="#tab-changelog" role="tab" data-toggle="tab">Changelog <span id="newBadge" class="badge">New!</span></a></li>
-                <li role="presentation"><a href="#tab-about" role="tab" data-toggle="tab">About</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab-help">
-                    <h4>Download rules</h4>
-
-                    <p>The download rules are applied one by one whenever you start downloading a file. Each rule
-                        consists of matchers and a download path pattern.
-                        The matchers are actually a set of <i>regular expressions</i> that applied to the
-                        <b>filetype</b>, <b>URL</b>,
-                        <b>referrer URL</b> and <b>filename</b> of the download item.
-                        If all of the non-empty mathers succeed for some rule, the file is renamed according to the
-                        download path pattern of this rule, the other rules are skipped.</p>
-
-                    <p>
-                        All the regular expressions are case-insensitive.
-                    </p>
-
-                    <h4>Matchers</h4>
-
-                    <p>You can use any <i>RegExp</i> constructions in the matchers (even the <i>capturing groups</i>).
-                    </p>
-
-                    <h4>MIME types</h4>
-                    MIME filetype is a text string that describes a format of a file. Check the following list of the most common MIME types:
-                    <dl class="dl-horizontal">
-                        <dt>application/pdf</dt>
-                        <dd>PDF documents</dd>
-                        <dt>application/zip</dt>
-                        <dd>Compressed archives</dd>
-                        <dt>application/x-bittorrent</dt>
-                        <dd>Torrent files</dd>
-                        <dt>application/exe</dt>
-                        <dd>Windows executable</dd>
-                        <dt>audio/mpeg</dt>
-                        <dd>MP3 files</dd>
-                        <dt>image/jpeg</dt>
-                        <dd>JPEG images</dd>
-                        <dt>image/png</dt>
-                        <dd>PNG images</dd>
-                    </dl>
-
-                    <h4>Examples</h4>
-                    <dl class="dl-horizontal">
-                        <dt>image/.*</dt>
-                        <dd>All images</dd>
-                        <dt>application/(zip|rar)</dt>
-                        <dd>Zip or rar archives</dd>
-                        <dt>.*</dt>
-                        <dd>Everything (catch-all)</dd>
-                    </dl>
-
-                    <h4>Download path patterns</h4>
-                    <p>Download path consists of forward-slash delimited folders (e.g. <em>my folder/my
-                        subfolder/</em>).
-                        You can also specify the exact filename at the end (e.g. <em>my folder/my
-                            file.zip</em>).
-                        And you can use <em>placeholders</em> as dynamic values in the path.</p>
-
-                    <h4>Placeholders</h4>
-                    <dl class="dl-horizontal">
-                        <dt>${filename}</dt>
-                        <dd>Original filename</dd>
-                        <dt>${url}</dt>
-                        <dd>Full download URL (before redirects)</dd>
-                        <dt>${finalUrl}</dt>
-                        <dd>Download URL after all redirects</dd>
-                        <dt>${referrer}</dt>
-                        <dd>Referrer URL</dd>
-                        <dt>${tabUrl}</dt>
-                        <dd>Current tab URL</dd>
-                        <dt>${mime}</dt>
-                        <dd>MIME type</dd>
-                        <dt>${date}</dt>
-                        <dd>Current date (YYYY-MM-DD format) or ${date:format} for
-                            custom formats</dd>
-                    </dl>
-                    <p>For ${date} placeholder you can use a date format as a parameter. E.g.: ${date:MMM DD, YYYY} or ${date:HH:mm}. You can use any format from the moment.js library.</p>
-
-                    <h5>Date format examples</h5>
-                    <dl class="dl-horizontal">
-                        <dt>YYYY-MM-DD</dt>
-                        <dd class="date-format-example" data-value="YYYY-MM-DD">-</dd>
-                        <dt>MM/DD/YYYY</dt>
-                        <dd class="date-format-example" data-value="MM/DD/YYYY">-</dd>
-                        <dt>MMM DD, YYYY</dt>
-                        <dd class="date-format-example" data-value="MMM DD, YYYY">-</dd>
-                        <dt>YYYY/MM</dt>
-                        <dd class="date-format-example" data-value="YYYY/MM">-</dd>
-                        <dt>HH:mm</dt>
-                        <dd class="date-format-example" data-value="HH:mm">-</dd>
-                    </dl>
-
-                    <h4>Capturing groups</h4>
-                    <p>
-                        If you use <i>capturing groups</i> (round brackets) in your <em>matchers</em>, you can reuse the matched groups in a <em>download path</em> by using
-                        <code>${field:1}</code>, <code>${field:2}</code>, etc. where <em>field</em> is a name of the
-                        matcher (<em>mime</em>, <em>referrer</em>, <em>url</em>, <em>finalUrl</em>, <em>tabUrl</em> or <em>filename</em>) and number is the index of the capturing group.
-                    </p>
-
-                    <h4>Examples</h4>
-                    <dl class="dl-horizontal">
-                        <dt>images/</dt>
-                        <dd>Put all downloads to 'images' folder. Original filename will be appended automatically.</dd>
-                        <dt>images/${filename}</dt>
-                        <dd>Put all downloads to 'images' folder. Same as above.</dd>
-                        <dt>downloads/${date:YYYY}/${date:MM}/</dt>
-                        <dd>Organize stuff by year and month.</dd>
-                        <dt>${referrer:1}/</dt>
-                        <dd>Create a folder based on the first capturing group of referrer pattern (e.g. domain name).</dd>
-                    </dl>
-
+                <div class="modal-body">
+                    <div class="rule-alert-container"></div>
+                    <textarea class="form-control" rows="10"></textarea>
                 </div>
-                <div class="tab-pane" id="tab-changelog">
-                    <h4>Version 0.5.1</h4>
-                    <ul>
-                        <li>Tab URL matcher now uses optional tabs permission</li>
-                        <li>Warning and permission request button when rules use Tab URL but permission not granted</li>
-                    </ul>
-                    <h4>Version 0.5.0</h4>
-                    <ul>
-                        <li>Support current tab url matcher</li>
-                    </ul>
-                    <h4>Version 0.4.1</h4>
-                    <ul>
-                        <li>Fix bug with date formatting</li>
-                    </ul>
-                    <h4>Version 0.4.0</h4>
-                    <ul>
-                        <li>Support the latest requirements for Google Chrome Extensions and migrate to Manifest V3</li>
-                    </ul>
-                    <h4>Version 0.3.2</h4>
-                    <ul>
-                        <li>Support export to/from the cloud storage</li>
-                    </ul>
-                    <h4>Version 0.3.1</h4>
-                    <ul>
-                        <li>Added support for name conflict action</li>
-                    </ul>
-                    <h4>Version 0.3</h4>
-                    <ul>
-                        <li>Added support for <strong>Final URL</strong> (file download url after all redirects) field and corresponding <code>finalUrl</code> placeholder</li>
-                    </ul>
-                    <h4>Version 0.2.5</h4>
-                    <ul>
-                        <li>Fixed typo in predefined referrer rule (reset the rules if your referrer rule doesn't work)</li>
-                    </ul>
-                    <h4>Version 0.2.4.2</h4>
-                    <ul>
-                        <li>Fixed issue with multiple matchers in destination</li>
-                    </ul>
-                    <h4>Version 0.2.4</h4>
-                    <ul>
-                        <li>Added date/time formatter for destination</li>
-                        <li>Added human-friendly descriptions for rules</li>
-                        <li>Now it's possible to disable rules instead of deleting them</li>
-                        <li>More predefined rules</li>
-                    </ul>
-                    <h4>Version 0.2.3</h4>
-                    <ul>
-                        <li>Fixed issue with escaped URLs</li>
-                    </ul>
-                    <h4>Version 0.2.2</h4>
-                    <ul>
-                        <li>Lots of bugfixes</li>
-                        <li>Rule title redesign</li>
-                    </ul>
-                    <h4>Version 0.2</h4>
-                    <ul>
-                        <li>Added import and export of rulesets</li>
-                        <li>Added "Share rule" button</li>
-                        <li>Small bugfixes and UI improvements</li>
-                    </ul>
-                    <h4>Version 0.1</h4>
-                    <ul>
-                        <li>Initial version, basic functionality</li>
-                    </ul>
-                </div>
-                <div class="tab-pane" id="tab-about">
-                    <h5><span class="about-heart">♥</span> Made with love to humans by robots~</h5>
-                    <p>Feel free to report any issues and feature requests or to join the development via our GitHub page</p>
-                    <ul>
-                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension/issues" target="_blank" rel="noopener noreferrer">Issue tracker</a></li>
-                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
-                        <li><a href="https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg" target="_blank" rel="noopener noreferrer">Chrome web store (for likes)</a></li>
-                        <li><a href="LICENSE" target="_blank">License</a></li>
-                    </ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Create rule</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="showRuleFromTextModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="showModalRuleTextLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="showModalRuleTextLabel">Share rule</h4>
-            </div>
-            <div class="modal-body">
-                <p>You can copy the text below and share your rule to a friend. <br/>
-                    To import a rule use "New rule from text..." button</p>
-                <textarea class="form-control " rows="4" readonly></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div id="addRuleFromTextModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRuleTextLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="modalRuleTextLabel">New rule</h4>
-            </div>
-            <div class="modal-body">
-                <div class="rule-alert-container"></div>
-                <textarea class="form-control" rows="10"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Create rule</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="importRulesFromTextModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importRulesModalTextLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="importRulesModalTextLabel">Import rules</h4>
-            </div>
-            <div class="modal-body">
-                <div class="rule-alert-container"></div>
-
-                <div class="form-group">
-                    <label for="importRulesFromTextModalFileInput">Load from file:</label>
-                    <input id="importRulesFromTextModalFileInput" type="file" accept="text/plain,application/json,.json,.txt" />
+    <div id="importRulesFromTextModal" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="importRulesModalTextLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="importRulesModalTextLabel">Import rules</h4>
                 </div>
-                <textarea class="form-control" rows="15"></textarea>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" id="import-rules-replace-existing-ckbx"> Replace existing rules (use with care)
-                    </label>
+                <div class="modal-body">
+                    <div class="rule-alert-container"></div>
+
+                    <div class="form-group">
+                        <label for="importRulesFromTextModalFileInput">Load from file:</label>
+                        <input id="importRulesFromTextModalFileInput" type="file"
+                            accept="text/plain,application/json,.json,.txt" />
+                    </div>
+                    <textarea class="form-control" rows="15"></textarea>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="import-rules-replace-existing-ckbx"> Replace existing rules (use
+                            with care)
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Import</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Import</button>
-            </div>
         </div>
     </div>
-</div>
 
 
-<script src="scripts/jquery.min.js"></script>
-<script src="scripts/bootstrap.min.js"></script>
-<script type="module" src="scripts/options.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script type="module" src="scripts/options.js"></script>
 
-<script type="text/html" id="error-alert-template">
+    <script type="text/html" id="error-alert-template">
     <div class="alert alert-danger">
         <span id="alert-text"></span>
         <button type="button" class="close" data-dismiss="alert">
@@ -449,7 +490,7 @@
     </div>
 </script>
 
-<script type="text/html" id="rule-template">
+    <script type="text/html" id="rule-template">
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -582,4 +623,5 @@
     </div>
 </script>
 </body>
+
 </html>
