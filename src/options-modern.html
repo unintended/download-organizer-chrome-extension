@@ -8,18 +8,6 @@
     <!-- Legacy Bootstrap for rapid prototyping -->
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     
-    <!-- Fix font loading for glyphicons in Chrome extensions -->
-    <style>
-        @font-face {
-            font-family: 'Glyphicons Halflings';
-            src: url('assets/fonts/glyphicons-halflings-regular.eot');
-            src: url('assets/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
-                 url('assets/fonts/glyphicons-halflings-regular.woff') format('woff'),
-                 url('assets/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
-                 url('assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
-        }
-    </style>
-    
     <style>
         /* Modern CSS with Container Queries and Nesting */
         :root {
@@ -57,17 +45,15 @@
             display: grid;
             grid-template-areas: 
                 "header header"
-                "sidebar main"
-                "footer footer";
-            grid-template-rows: var(--header-height) 1fr auto;
+                "sidebar main";
+            grid-template-rows: var(--header-height) 1fr;
             grid-template-columns: var(--sidebar-width) 1fr;
-            min-height: 100vh;
+            height: 100vh;
             
             @container (max-width: 768px) {
                 grid-template-areas:
                     "header"
-                    "main"
-                    "footer";
+                    "main";
                 grid-template-columns: 1fr;
                 
                 & .sidebar {
@@ -97,7 +83,7 @@
             & .header-actions {
                 margin-left: auto;
                 display: flex;
-                gap: 0.5rem;
+                gap: 0.75rem;
                 align-items: center;
             }
         }
@@ -150,8 +136,6 @@
                     
                     &:hover {
                         background: var(--primary-hover);
-                        transform: translateY(-1px);
-                        box-shadow: var(--shadow-md);
                     }
 
                     &::before {
@@ -159,26 +143,6 @@
                         font-size: 1.125rem;
                         font-weight: 700;
                     }
-                }
-            }
-
-            & .sidebar-section {
-                padding: 1rem 1.25rem;
-                border-bottom: 1px solid var(--border);
-
-                & .section-title {
-                    margin: 0 0 0.75rem 0;
-                    font-size: 0.875rem;
-                    font-weight: 600;
-                    color: #374151;
-                    text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                }
-
-                & .action-buttons {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
                 }
             }
         }
@@ -207,20 +171,8 @@
                 }
 
                 &.dragging {
-                    opacity: 0.8;
-                    transform: rotate(2deg) scale(1.02);
-                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-                    z-index: 1000;
-                    transition: none;
-                }
-
-                &.drag-over {
-                    border-top: 2px solid var(--primary-color);
-                }
-
-                &.drag-preview {
-                    opacity: 0.3;
-                    transform: scale(0.95);
+                    opacity: 0.5;
+                    transform: rotate(2deg);
                 }
 
                 & .rule-content {
@@ -286,31 +238,16 @@
                     left: 0;
                     top: 50%;
                     transform: translateY(-50%);
-                    width: 6px;
-                    height: 24px;
-                    background: linear-gradient(45deg, #cbd5e1 25%, transparent 25%), 
-                               linear-gradient(-45deg, #cbd5e1 25%, transparent 25%), 
-                               linear-gradient(45deg, transparent 75%, #cbd5e1 75%), 
-                               linear-gradient(-45deg, transparent 75%, #cbd5e1 75%);
-                    background-size: 4px 4px;
-                    background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
-                    border-radius: 3px;
+                    width: 4px;
+                    height: 20px;
+                    background: #cbd5e1;
+                    border-radius: 2px;
                     cursor: grab;
                     opacity: 0;
                     transition: var(--transition);
 
                     &:active {
                         cursor: grabbing;
-                    }
-
-                    &:hover {
-                        background: linear-gradient(45deg, var(--primary-color) 25%, transparent 25%), 
-                                   linear-gradient(-45deg, var(--primary-color) 25%, transparent 25%), 
-                                   linear-gradient(45deg, transparent 75%, var(--primary-color) 75%), 
-                                   linear-gradient(-45deg, transparent 75%, var(--primary-color) 75%);
-                        background-size: 4px 4px;
-                        background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
-                        transform: translateY(-50%) scale(1.2);
                     }
                 }
 
@@ -487,7 +424,6 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
-            white-space: nowrap;
 
             &.btn-primary {
                 background: var(--primary-color);
@@ -495,8 +431,6 @@
                 
                 &:hover {
                     background: var(--primary-hover);
-                    transform: translateY(-1px);
-                    box-shadow: var(--shadow-md);
                 }
             }
 
@@ -506,8 +440,6 @@
                 
                 &:hover {
                     background: #047857;
-                    transform: translateY(-1px);
-                    box-shadow: var(--shadow-md);
                 }
             }
 
@@ -517,8 +449,6 @@
                 
                 &:hover {
                     background: #b91c1c;
-                    transform: translateY(-1px);
-                    box-shadow: var(--shadow-md);
                 }
             }
 
@@ -529,50 +459,12 @@
                 
                 &:hover {
                     background: #f8fafc;
-                    border-color: var(--primary-color);
-                    color: var(--primary-color);
-                    transform: translateY(-1px);
-                }
-            }
-
-            &.btn-ghost {
-                background: transparent;
-                border: none;
-                color: #6b7280;
-                padding: 0.5rem 0.75rem;
-                
-                &:hover {
-                    background: rgba(59, 130, 246, 0.1);
-                    color: var(--primary-color);
-                }
-
-                & svg {
-                    width: 16px;
-                    height: 16px;
-                }
-            }
-
-            &.btn-danger-ghost {
-                background: transparent;
-                border: none;
-                color: #6b7280;
-                padding: 0.5rem 0.75rem;
-                
-                &:hover {
-                    background: rgba(239, 68, 68, 0.1);
-                    color: var(--danger-color);
-                }
-
-                & svg {
-                    width: 16px;
-                    height: 16px;
                 }
             }
 
             &:disabled {
                 opacity: 0.5;
                 cursor: not-allowed;
-                transform: none !important;
             }
         }
 
@@ -681,146 +573,6 @@
             }
         }
 
-        /* Dashboard Footer */
-        .dashboard-footer {
-            grid-area: footer;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem 0;
-            margin-top: 4rem;
-
-            & .footer-content {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 2rem;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 2rem;
-
-                @container (max-width: 768px) {
-                    grid-template-columns: 1fr;
-                    gap: 1.5rem;
-                }
-            }
-
-            & .footer-section {
-                & h4 {
-                    margin: 0 0 1rem 0;
-                    font-size: 1.125rem;
-                    font-weight: 600;
-                    color: #f8fafc;
-                }
-
-                & p {
-                    margin: 0 0 0.75rem 0;
-                    line-height: 1.6;
-                    color: #e2e8f0;
-                }
-
-                & ul {
-                    list-style: none;
-                    margin: 0;
-                    padding: 0;
-
-                    & li {
-                        margin-bottom: 0.5rem;
-
-                        & a {
-                            color: #e2e8f0;
-                            text-decoration: none;
-                            transition: var(--transition);
-
-                            &:hover {
-                                color: white;
-                                text-decoration: underline;
-                            }
-                        }
-                    }
-                }
-
-                &:last-child {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    text-align: center;
-
-                    & .footer-meta {
-                        & p {
-                            margin: 0.25rem 0;
-                            font-size: 0.875rem;
-
-                            &.version {
-                                font-family: 'JetBrains Mono', monospace;
-                                background: rgba(255, 255, 255, 0.1);
-                                padding: 0.25rem 0.5rem;
-                                border-radius: 4px;
-                                display: inline-block;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /* Enhanced Drag and Drop Animations */
-        .rule-item {
-            &.dragging {
-                opacity: 0.8;
-                transform: rotate(2deg) scale(1.02);
-                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-                z-index: 1000;
-                transition: none;
-            }
-
-            &.drag-over {
-                border-top: 2px solid var(--primary-color);
-                animation: pulse 0.6s ease-in-out infinite;
-            }
-
-            &.drag-preview {
-                opacity: 0.3;
-                transform: scale(0.95);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% { 
-                border-top-color: var(--primary-color); 
-                background-color: transparent; 
-            }
-            50% { 
-                border-top-color: var(--primary-hover); 
-                background-color: rgba(37, 99, 235, 0.05); 
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes bounce {
-            0% { transform: translateX(-50%) translateY(0px); }
-            100% { transform: translateX(-50%) translateY(-4px); }
-        }
-
-        .rule-item {
-            animation: slideIn 0.3s ease-out;
-        }
-
-        /* Drop indicator positioning */
-        .drop-indicator {
-            position: absolute !important;
-            z-index: 1001 !important;
-            pointer-events: none !important;
-        }
-
         /* CSS Nesting fallback for older browsers */
         @supports not (selector(:is(h1))) {
             .dashboard-header h1 { /* fallback styles */ }
@@ -836,25 +588,9 @@
         <header class="dashboard-header">
             <h1>📦 RegExp Download Organizer</h1>
             <div class="header-actions">
-                <button class="btn btn-ghost" id="help-btn" title="Help & Documentation">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                        <circle cx="12" cy="17" r=".02"/>
-                        <circle cx="12" cy="12" r="10"/>
-                    </svg>
-                    Help
-                </button>
-                <button class="btn btn-ghost" id="changelog-btn" title="What's New">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M8 6h13"/>
-                        <path d="M8 12h13"/>
-                        <path d="M8 18h13"/>
-                        <path d="M3 6h.01"/>
-                        <path d="M3 12h.01"/>
-                        <path d="M3 18h.01"/>
-                    </svg>
-                    Changes
-                </button>
+                <button class="btn btn-outline" id="import-btn">Import</button>
+                <button class="btn btn-outline" id="export-btn">Export</button>
+                <button class="btn btn-danger" id="reset-btn">Reset</button>
             </div>
         </header>
 
@@ -867,35 +603,6 @@
             
             <div class="sidebar-actions">
                 <button class="btn-new-rule" id="add-rule-btn">Add New Rule</button>
-            </div>
-
-            <div class="sidebar-section">
-                <h3 class="section-title">Actions</h3>
-                <div class="action-buttons">
-                    <button class="btn btn-ghost" id="import-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7,10 12,15 17,10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        Import Rules
-                    </button>
-                    <button class="btn btn-ghost" id="export-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="17,8 12,3 7,8"/>
-                            <line x1="12" y1="3" x2="12" y2="15"/>
-                        </svg>
-                        Export Rules
-                    </button>
-                    <button class="btn btn-danger-ghost" id="reset-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                            <path d="M3 3v5h5"/>
-                        </svg>
-                        Reset to Defaults
-                    </button>
-                </div>
             </div>
 
             <ul class="rule-list" id="rule-list">
@@ -1025,42 +732,6 @@
                 <div id="alerts-container"></div>
             </div>
         </main>
-
-        <!-- Footer -->
-        <footer class="dashboard-footer">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>About RegExp Download Organizer</h4>
-                    <p>Transform your chaotic Downloads folder into an organized file system with intelligent rules. 
-                       This extension uses powerful regular expressions to automatically sort downloads into meaningful directory structures.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Features</h4>
-                    <ul>
-                        <li>Pattern matching with regex</li>
-                        <li>Dynamic folder creation</li>
-                        <li>Date-based organization</li>
-                        <li>Drag & drop rule ordering</li>
-                        <li>Real-time rule validation</li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg" target="_blank">Chrome Web Store</a></li>
-                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension" target="_blank">GitHub Repository</a></li>
-                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension/issues" target="_blank">Report Issues</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <div class="footer-meta">
-                        <p>© 2026 RegExp Download Organizer</p>
-                        <p>Created with ❤️ for better download management</p>
-                        <p class="version">Version 0.5.2</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
     </div>
 
     <!-- Hidden templates for backward compatibility -->
@@ -1077,6 +748,283 @@
     <!-- Load Scripts -->
     <script src="scripts/jquery.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
-    <script type="module" src="scripts/options-modern.js"></script>
+    <script type="module" src="scripts/options.js"></script>
+    
+    <!-- Modern dashboard functionality -->
+    <script>
+        // Modern dashboard JavaScript integration
+        // This will be integrated with the existing options.js
+        document.addEventListener('DOMContentLoaded', function() {
+            const dashboard = {
+                currentRule: null,
+                rules: [],
+                
+                init() {
+                    this.setupEventListeners();
+                    this.loadRules();
+                    this.setupDragAndDrop();
+                },
+
+                setupEventListeners() {
+                    // New rule button
+                    document.getElementById('add-rule-btn').addEventListener('click', () => {
+                        this.showRuleForm();
+                    });
+
+                    // Form actions
+                    document.getElementById('save-rule-btn').addEventListener('click', () => {
+                        this.saveRule();
+                    });
+
+                    document.getElementById('cancel-rule-btn').addEventListener('click', () => {
+                        this.hideRuleForm();
+                    });
+
+                    document.getElementById('delete-rule-btn').addEventListener('click', () => {
+                        this.deleteRule();
+                    });
+                },
+
+                showRuleForm(rule = null) {
+                    this.currentRule = rule;
+                    const form = document.getElementById('rule-form');
+                    const emptyState = document.getElementById('empty-state');
+                    const deleteBtn = document.getElementById('delete-rule-btn');
+                    
+                    if (rule) {
+                        this.populateForm(rule);
+                        deleteBtn.style.display = 'block';
+                        document.getElementById('form-title').textContent = 'Edit Download Rule';
+                    } else {
+                        this.clearForm();
+                        deleteBtn.style.display = 'none';
+                        document.getElementById('form-title').textContent = 'New Download Rule';
+                    }
+                    
+                    emptyState.style.display = 'none';
+                    form.style.display = 'block';
+                    form.classList.add('fade-in');
+                },
+
+                hideRuleForm() {
+                    const form = document.getElementById('rule-form');
+                    const emptyState = document.getElementById('empty-state');
+                    
+                    form.style.display = 'none';
+                    
+                    if (this.rules.length === 0) {
+                        emptyState.style.display = 'block';
+                    }
+                },
+
+                updateRuleCount() {
+                    const count = this.rules.length;
+                    const enabledCount = this.rules.filter(rule => rule.enabled).length;
+                    document.querySelector('.rule-count').textContent = 
+                        `${count} rules (${enabledCount} enabled)`;
+                },
+
+                renderRuleList() {
+                    const list = document.getElementById('rule-list');
+                    list.innerHTML = '';
+                    
+                    this.rules.forEach((rule, index) => {
+                        const item = this.createRuleListItem(rule, index);
+                        list.appendChild(item);
+                    });
+                    
+                    this.updateRuleCount();
+                },
+
+                createRuleListItem(rule, index) {
+                    const li = document.createElement('li');
+                    li.className = 'rule-item';
+                    li.draggable = true;
+                    li.dataset.index = index;
+                    
+                    li.innerHTML = `
+                        <div class="rule-drag-handle" title="Drag to reorder"></div>
+                        <div class="rule-content">
+                            <div class="rule-header">
+                                <h4 class="rule-title">${rule.description || 'Untitled Rule'}</h4>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" ${rule.enabled ? 'checked' : ''}>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="rule-description">${this.generateRuleDescription(rule)}</div>
+                            <div class="rule-badges">${this.generateRuleBadges(rule)}</div>
+                        </div>
+                    `;
+                    
+                    // Event listeners
+                    li.addEventListener('click', (e) => {
+                        if (!e.target.matches('input')) {
+                            this.selectRule(li, rule);
+                        }
+                    });
+                    
+                    const toggle = li.querySelector('input[type="checkbox"]');
+                    toggle.addEventListener('change', (e) => {
+                        e.stopPropagation();
+                        rule.enabled = toggle.checked;
+                        this.updateRuleCount();
+                        // Save to storage here
+                    });
+                    
+                    return li;
+                },
+
+                selectRule(element, rule) {
+                    // Remove active class from all items
+                    document.querySelectorAll('.rule-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // Add active class to selected item
+                    element.classList.add('active');
+                    
+                    // Show rule form with data
+                    this.showRuleForm(rule);
+                },
+
+                generateRuleDescription(rule) {
+                    const matchers = [];
+                    if (rule.url) matchers.push(`URL: ${rule.url}`);
+                    if (rule.mime) matchers.push(`Type: ${rule.mime}`);
+                    if (rule.filename) matchers.push(`File: ${rule.filename}`);
+                    
+                    return matchers.length > 0 
+                        ? `Matches: ${matchers.join(', ')}`
+                        : 'No matchers configured';
+                },
+
+                generateRuleBadges(rule) {
+                    const badges = [];
+                    if (rule.url) badges.push('<span class="badge badge-url">URL</span>');
+                    if (rule.mime) badges.push('<span class="badge badge-mime">MIME</span>');
+                    if (rule.filename) badges.push('<span class="badge badge-filename">FILE</span>');
+                    if (rule.referrer) badges.push('<span class="badge badge-referrer">REF</span>');
+                    if (rule.tabUrl) badges.push('<span class="badge badge-taburl">TAB</span>');
+                    if (!rule.enabled) badges.push('<span class="badge badge-disabled">DISABLED</span>');
+                    
+                    return badges.join('');
+                },
+
+                setupDragAndDrop() {
+                    const list = document.getElementById('rule-list');
+                    let draggedElement = null;
+                    
+                    list.addEventListener('dragstart', (e) => {
+                        draggedElement = e.target;
+                        e.target.classList.add('dragging');
+                    });
+                    
+                    list.addEventListener('dragend', (e) => {
+                        e.target.classList.remove('dragging');
+                        draggedElement = null;
+                    });
+                    
+                    list.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                    });
+                    
+                    list.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        const target = e.target.closest('.rule-item');
+                        if (target && draggedElement && target !== draggedElement) {
+                            const targetIndex = parseInt(target.dataset.index);
+                            const draggedIndex = parseInt(draggedElement.dataset.index);
+                            
+                            // Reorder rules array
+                            const movedRule = this.rules.splice(draggedIndex, 1)[0];
+                            this.rules.splice(targetIndex, 0, movedRule);
+                            
+                            // Re-render list
+                            this.renderRuleList();
+                            
+                            // Save to storage here
+                        }
+                    });
+                },
+
+                // Integration methods for existing options.js
+                loadRules() {
+                    // This will integrate with existing storage loading
+                    // For now, load sample data
+                    this.rules = [];
+                    this.renderRuleList();
+                },
+
+                populateForm(rule) {
+                    document.getElementById('rule-description').value = rule.description || '';
+                    document.getElementById('rule-url').value = rule.url || '';
+                    document.getElementById('rule-mime').value = rule.mime || '';
+                    document.getElementById('rule-filename').value = rule.filename || '';
+                    document.getElementById('rule-referrer').value = rule.referrer || '';
+                    document.getElementById('rule-taburl').value = rule.tabUrl || '';
+                    document.getElementById('rule-pattern').value = rule.pattern || '';
+                    document.getElementById('rule-conflict').value = rule.conflictAction || 'uniquify';
+                },
+
+                clearForm() {
+                    document.getElementById('rule-description').value = '';
+                    document.getElementById('rule-url').value = '';
+                    document.getElementById('rule-mime').value = '';
+                    document.getElementById('rule-filename').value = '';
+                    document.getElementById('rule-referrer').value = '';
+                    document.getElementById('rule-taburl').value = '';
+                    document.getElementById('rule-pattern').value = '';
+                    document.getElementById('rule-conflict').value = 'uniquify';
+                },
+
+                saveRule() {
+                    const ruleData = {
+                        description: document.getElementById('rule-description').value,
+                        url: document.getElementById('rule-url').value,
+                        mime: document.getElementById('rule-mime').value,
+                        filename: document.getElementById('rule-filename').value,
+                        referrer: document.getElementById('rule-referrer').value,
+                        tabUrl: document.getElementById('rule-taburl').value,
+                        pattern: document.getElementById('rule-pattern').value,
+                        conflictAction: document.getElementById('rule-conflict').value,
+                        enabled: true
+                    };
+
+                    if (this.currentRule) {
+                        // Update existing rule
+                        Object.assign(this.currentRule, ruleData);
+                    } else {
+                        // Add new rule
+                        this.rules.push(ruleData);
+                    }
+
+                    this.renderRuleList();
+                    this.hideRuleForm();
+                    
+                    // Save to storage here
+                },
+
+                deleteRule() {
+                    if (this.currentRule) {
+                        const index = this.rules.indexOf(this.currentRule);
+                        if (index > -1) {
+                            this.rules.splice(index, 1);
+                            this.renderRuleList();
+                            this.hideRuleForm();
+                            
+                            // Save to storage here
+                        }
+                    }
+                }
+            };
+
+            // Initialize dashboard
+            dashboard.init();
+            
+            // Expose dashboard for integration with existing options.js
+            window.dashboard = dashboard;
+        });
+    </script>
 </body>
 </html>

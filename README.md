@@ -24,9 +24,14 @@ Open `download-organizer-chrome-extension.code-workspace` in VS Code for the com
 
 See [Development Guide](docs/DEVELOPMENT.md) for setting up the development environment.
 
-**CLI Documentation**: See [CLI Guide](docs/CLI.md) for complete command-line interface documentation.
+### 📚 Documentation
 
-**CI/CD Pipeline**: See [CI/CD Guide](docs/CICD.md) for automated Chrome Web Store deployment setup.
+| Guide | Description |
+|-------|-------------|
+| [User Guide](docs/USER_GUIDE.md) | How to use the extension and create rules |
+| [Development](docs/DEVELOPMENT.md) | Setup, building, VS Code integration, troubleshooting |
+| [CLI Commands](docs/CLI.md) | Complete command-line interface reference |
+| [CI/CD Pipeline](docs/CICD.md) | Automated deployment and workflows |
 
 ### Quick Commands
 

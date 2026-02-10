@@ -62,4 +62,9 @@ copyFile('src/scripts/js/jquery.min.js', 'dist/scripts/jquery.min.js');
 copyFile('src/scripts/js/bootstrap.min.js', 'dist/scripts/bootstrap.min.js');
 copyFile('src/scripts/js/moment-es.js', 'dist/scripts/js/moment-es.js');
 
+// Copy fonts to root fonts directory for Bootstrap compatibility
+// Bootstrap CSS expects fonts at ../fonts/ relative to styles/css/
+fs.mkdirSync('dist/fonts', { recursive: true });
+copyRecursive('src/assets/fonts', 'dist/fonts');
+
 console.log('Assets copied successfully!');

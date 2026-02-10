@@ -14,9 +14,10 @@
 	//   - Press F5 to debug in Chrome
 	// 
 	// 📖 Documentation:
-	//   - CLI Guide: docs/CLI.md
-	//   - CI/CD Setup: docs/CICD.md  
+	//   - User Guide: docs/USER_GUIDE.md
 	//   - Development: docs/DEVELOPMENT.md
+	//   - CLI Commands: docs/CLI.md
+	//   - CI/CD Setup: docs/CICD.md
 	//
 	// =====================================================
 	"folders": [
@@ -126,7 +127,8 @@
 			"yaml": true,
 			"json": true,
 			"jsonc": true
-		}
+		},
+		"powershell.cwd": "📦 RegExp Download Organizer"
 	},
 	"extensions": {
 		"recommendations": [
