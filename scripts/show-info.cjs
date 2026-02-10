@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const pkg = require(path.join(__dirname, '../package.json'));
+
+console.log('╔════════════════════════════════════════════════════════════════════════╗');
+console.log(`║                    ${pkg.displayName}                    ║`);
+console.log('╠═════════════════════════════════════════════════════════════════════════╣');
+console.log(`║ Version: ${pkg.version.padEnd(10)} │ License: ${pkg.license.padEnd(10)} │ Node: ${process.version.padEnd(10)} ║`);
+console.log('╠═════════════════════════════════════════════════════════════════════════╣');
+console.log('║                          🚀 Quick Commands                              ║');
+console.log('╠═════════════════════════════════════════════════════════════════════════╣');
+console.log('║ npm run proto        │ Build & test extension in Chrome                ║');
+console.log('║ npm run dev          │ Watch mode development                          ║');
+console.log('║ npm run build        │ Build extension for production                  ║');
+console.log('║ npm run zip          │ Create distribution package                     ║');
+console.log('╠═════════════════════════════════════════════════════════════════════════╣');
+console.log('║                         📖 Documentation                               ║');
+console.log('╠═════════════════════════════════════════════════════════════════════════╣');
+console.log('║ npm run help         │ View help documentation                         ║');
+console.log('║ npm run about        │ About this extension                            ║');
+console.log('║ npm run changelog    │ View version history                            ║');
+console.log('║ npm run debug        │ Extension debugging guide                       ║');
+console.log('╠═════════════════════════════════════════════════════════════════════════╣');
+console.log('║                          🔗 Links                                      ║');
+console.log('╠═════════════════════════════════════════════════════════════════════════╣');
+console.log('║ npm run webstore     │ Open Chrome Web Store page                      ║');
+console.log('║ npm run github       │ Open GitHub repository                          ║');
+console.log('║ npm run issues       │ Report bugs & issues                            ║');
+console.log('╚═════════════════════════════════════════════════════════════════════════╝');
+console.log('');
+console.log('📋 Description:');
+console.log(`   ${pkg.description}`);
+console.log('');
+console.log('🌟 Features:');
+console.log('   • Intelligent RegExp-based download organization');
+console.log('   • Custom folder structures with variables'); 
+console.log('   • Date-based file sorting with moment.js');
+console.log('   • MIME type and URL pattern matching');
+console.log('   • TypeScript development with modern tooling');
+console.log('');

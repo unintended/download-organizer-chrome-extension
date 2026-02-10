@@ -1,0 +1,244 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "📦 RegExp Download Organizer"
+		},
+		{
+			"path": "./src",
+			"name": "📁 Source"
+		},
+		{
+			"path": "./dist",
+			"name": "🚀 Distribution"
+		},
+		{
+			"path": "./docs",
+			"name": "📚 Documentation"
+		}
+	],
+	"settings": {
+		// TypeScript settings
+		"typescript.preferences.includePackageJsonAutoImports": "on",
+		"typescript.suggest.autoImports": true,
+		"typescript.updateImportsOnFileMove.enabled": "always",
+		"typescript.preferences.includeNonRelativeModuleResolutions": true,
+		
+		// ESLint settings
+		"eslint.enable": true,
+		"eslint.format.enable": true,
+		"eslint.lintTask.enable": true,
+		"eslint.workingDirectories": ["./"],
+		
+		// Prettier settings
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnPaste": true,
+		"editor.formatOnType": false,
+		
+		// File associations
+		"files.associations": {
+			"*.json": "jsonc",
+			"manifest.json": "jsonc"
+		},
+		
+		// Search settings
+		"search.exclude": {
+			"**/node_modules": true,
+			"**/dist": false,
+			"**/*.min.js": true,
+			"**/*.min.css": true,
+			"**/bootstrap.min.*": true,
+			"**/jquery.min.*": true
+		},
+		
+		// File explorer settings
+		"explorer.fileNesting.enabled": true,
+		"explorer.fileNesting.patterns": {
+			"package.json": "package-lock.json, tsconfig.json, .eslintrc.cjs, .prettierrc, vite.config.js",
+			"*.ts": "${capture}.js, ${capture}.js.map",
+			"*.html": "${capture}.css"
+		},
+		
+		// Editor settings
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true,
+		"editor.detectIndentation": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit",
+			"source.organizeImports": "explicit"
+		},
+		
+		// Terminal settings
+		"terminal.integrated.defaultProfile.windows": "PowerShell",
+		"terminal.integrated.cwd": "${workspaceFolder}",
+		
+		// Debugging settings
+		"debug.allowBreakpointsEverywhere": true,
+		"debug.javascript.unmapMissingSources": true,
+		
+		// Extension-specific settings
+		"emmet.includeLanguages": {
+			"typescript": "javascript"
+		},
+		
+		// Git settings
+		"git.ignoreLimitWarning": true,
+		"scm.defaultViewMode": "tree"
+	},
+	"extensions": {
+		"recommendations": [
+			// Essential for TypeScript development
+			"ms-vscode.vscode-typescript-next",
+			
+			// Chrome Extension development
+			"chrome-extension.chrome-extension-pack",
+			
+			// Code quality
+			"esbenp.prettier-vscode",
+			"dbaeumer.vscode-eslint",
+			
+			// Productivity
+			"bradlc.vscode-tailwindcss",
+			"formulahendry.auto-rename-tag",
+			"christian-kohler.path-intellisense",
+			"formulahendry.auto-close-tag",
+			
+			// JSON/Manifest editing
+			"ms-vscode.jsonc",
+			"quicktype.quicktype",
+			
+			// Git integration
+			"eamodio.gitlens",
+			
+			// File icons
+			"vscode-icons-team.vscode-icons",
+			
+			// Debugging
+			"ms-vscode.js-debug",
+			
+			// Documentation
+			"yzhang.markdown-all-in-one"
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"type": "npm",
+				"script": "build",
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"label": "🔨 Build Extension",
+				"detail": "Compile TypeScript and copy assets",
+				"problemMatcher": ["$tsc"],
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared",
+					"showReuseMessage": true,
+					"clear": false
+				}
+			},
+			{
+				"type": "npm",
+				"script": "dev",
+				"group": "build",
+				"label": "👀 Watch Mode",
+				"detail": "Build and watch for changes",
+				"isBackground": true,
+				"problemMatcher": ["$tsc-watch"],
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "dedicated",
+					"showReuseMessage": false,
+					"clear": true
+				}
+			},
+			{
+				"type": "npm",
+				"script": "lint",
+				"group": "test",
+				"label": "🔍 Lint Code",
+				"detail": "Run ESLint on source files",
+				"problemMatcher": ["$eslint-stylish"]
+			},
+			{
+				"type": "npm", 
+				"script": "format",
+				"group": "test",
+				"label": "✨ Format Code",
+				"detail": "Run Prettier on source files"
+			},
+			{
+				"type": "npm",
+				"script": "zip",
+				"group": "build",
+				"label": "📦 Package Extension",
+				"detail": "Create distribution ZIP file"
+			},
+			{
+				"type": "shell",
+				"command": "start",
+				"args": ["chrome://extensions/"],
+				"group": "test",
+				"label": "🌐 Open Chrome Extensions",
+				"detail": "Open Chrome extensions page for testing",
+				"windows": {
+					"command": "start",
+					"args": ["chrome://extensions/"]
+				},
+				"linux": {
+					"command": "google-chrome",
+					"args": ["chrome://extensions/"]
+				},
+				"osx": {
+					"command": "open",
+					"args": ["-a", "Google Chrome", "chrome://extensions/"]
+				}
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "🐛 Debug Extension (Chrome)",
+				"type": "chrome",
+				"request": "launch",
+				"url": "chrome://extensions/",
+				"webRoot": "${workspaceFolder}/dist",
+				"sourceMaps": true,
+				"userDataDir": "${workspaceFolder}/.chrome-debug",
+				"runtimeArgs": [
+					"--load-extension=${workspaceFolder}/dist",
+					"--disable-web-security",
+					"--user-data-dir=${workspaceFolder}/.chrome-debug"
+				],
+				"preLaunchTask": "🔨 Build Extension"
+			},
+			{
+				"name": "🔧 Debug Background Script",
+				"type": "chrome",
+				"request": "attach",
+				"port": 9222,
+				"webRoot": "${workspaceFolder}/dist",
+				"sourceMaps": true,
+				"urlFilter": "chrome-extension://*"
+			},
+			{
+				"name": "📄 Debug Options Page",
+				"type": "chrome",
+				"request": "launch",
+				"url": "chrome-extension://extension-id/options.html",
+				"webRoot": "${workspaceFolder}/dist",
+				"sourceMaps": true
+			}
+		]
+	}
+}

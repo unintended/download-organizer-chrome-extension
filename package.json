@@ -1,0 +1,142 @@
+{
+  "name": "regexp-download-organizer",
+  "displayName": "RegExp Download Organizer", 
+  "version": "0.5.1",
+  "description": "Chrome extension that allows you to set custom download locations with flexible regexp-based rules",
+  "longDescription": "Transform your chaotic Downloads folder into an organized file system with intelligent RegExp-based rules. Automatically sort downloads by URL patterns, file types, dates, and custom criteria. Perfect for developers, content creators, and anyone who values organized digital life.",
+  "private": false,
+  "type": "module",
+  "bin": {
+    "regexp-download-organizer": "./bin/regexp-download-organizer.js",
+    "rdo": "./bin/regexp-download-organizer.js"
+  },
+  "main": "dist/scripts/manager.js",
+  "license": "MIT",
+  "author": {
+    "name": "unintended",
+    "url": "https://github.com/unintended"
+  },
+  "contributors": [
+    {
+      "name": "Community Contributors",
+      "url": "https://github.com/unintended/download-organizer-chrome-extension/contributors"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unintended/download-organizer-chrome-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/unintended/download-organizer-chrome-extension/issues",
+    "email": ""
+  },
+  "homepage": "https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/unintended"
+  },
+  "keywords": [
+    "chrome-extension",
+    "download-manager",
+    "file-organizer",
+    "regexp",
+    "automation",
+    "productivity",
+    "downloads",
+    "file-sorting",
+    "browser-extension",
+    "typescript",
+    "cli",
+    "command-line",
+    "development-tools"
+  ],
+  "extensionInfo": {
+    "id": "oamembonjndgangicfphlckkdmagpjlg",
+    "manifestVersion": 3,
+    "chromeWebStoreUrl": "https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg",
+    "permissions": ["downloads", "offscreen", "storage"],
+    "optionalPermissions": ["tabs"],
+    "minimumChromeVersion": "88"
+  },
+  "directories": {
+    "doc": "./docs",
+    "lib": "./src/scripts",
+    "test": "./tests"
+  },
+  "files": [
+    "bin/**/*",
+    "dist/**/*",
+    "src/**/*",
+    "scripts/**/*",
+    "docs/**/*",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run compile && npm run copy-assets",
+    "compile": "tsc",
+    "copy-assets": "node scripts/copy-assets.cjs",
+    "dev": "npm run build && npm run watch",
+    "watch": "node scripts/watch-dev.cjs",
+    "proto": "npm run build && echo 'Extension built! Load the dist/ folder in Chrome at chrome://extensions/'",
+    "lint": "eslint src/**/*.{js,ts} --fix",
+    "format": "prettier --write src/**/*.{js,ts,html,css}",
+    "type-check": "tsc --noEmit",
+    "zip": "npm run build && node scripts/zip-extension.cjs",
+    "clean": "node scripts/clean.mjs",
+    "info": "node scripts/show-info.cjs",
+    "info-short": "node -e \"const pkg = require('./package.json'); console.log(`${pkg.displayName} v${pkg.version}\\n${pkg.description}\\n\\nAuthor: ${pkg.author.name}\\nLicense: ${pkg.license}\\nHomepage: ${pkg.homepage}`)\"",
+    "version-info": "node -e \"const pkg = require('./package.json'); const manifest = require('./src/manifest.json'); console.log(`Package: ${pkg.version}\\nManifest: ${manifest.version}\\nNode: ${process.version}\\nPlatform: ${process.platform}`)\"",
+    "changelog": "type CHANGELOG.md 2>NUL || cat CHANGELOG.md",
+    "help": "type docs\\HELP.md 2>NUL || cat docs/HELP.md || echo 'Help documentation not found'",
+    "about": "type docs\\ABOUT.md 2>NUL || cat docs/ABOUT.md || echo 'About documentation not found'",
+    "docs": "echo Opening documentation... && start docs\\HELP.md || open docs/HELP.md || echo 'Unable to open docs, see docs/HELP.md'",
+    "validate": "npm run type-check",
+    "validate-full": "npm run type-check && npm run lint",
+    "cli": "./bin/regexp-download-organizer.js",
+    "cli-help": "./bin/regexp-download-organizer.js --help",
+    "cli-version": "./bin/regexp-download-organizer.js --version",
+    "test-cli": "npm run build && node bin/regexp-download-organizer.js info",
+    "global-install": "npm install -g .",
+    "global-uninstall": "npm uninstall -g regexp-download-organizer",
+    "link": "npm link",
+    "unlink": "npm unlink regexp-download-organizer",
+    "prepack": "npm run clean && npm run build && npm run validate",
+    "preversion": "npm run validate",
+    "postversion": "git push && git push --tags",
+    "release": "npm run clean && npm run build && npm run zip && echo 'Release package created!'",
+    "install-dev": "npm install && echo 'Development environment ready! Run: npm run dev'",
+    "debug": "echo 'Extension Debug Instructions:' && echo '1. Open chrome://extensions/' && echo '2. Find \"RegExp Download Organizer\"' && echo '3. Click \"Inspect views: service worker\"' && echo '4. Download a file and check console output'",
+    "webstore": "node -e \"const pkg = require('./package.json'); console.log('Chrome Web Store:', pkg.homepage)\" && start \"\" \"https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg\"",
+    "github": "node -e \"const pkg = require('./package.json'); console.log('GitHub Repository:', pkg.repository.url.replace('.git', ''))\" && start \"\" \"https://github.com/unintended/download-organizer-chrome-extension\"",
+    "issues": "start \"\" \"https://github.com/unintended/download-organizer-chrome-extension/issues\"",
+    "update-manifest": "node -e \"const pkg = require('./package.json'); const fs = require('fs'); const manifest = JSON.parse(fs.readFileSync('src/manifest.json')); manifest.version = pkg.version; fs.writeFileSync('src/manifest.json', JSON.stringify(manifest, null, 2))\"",
+    "sync-version": "npm run update-manifest && echo 'Version synced between package.json and manifest.json'",
+    "project-stats": "node -e \"const fs = require('fs'); const path = require('path'); function countFiles(dir, ext) { try { return fs.readdirSync(dir, {recursive: true}).filter(f => f.endsWith(ext)).length; } catch { return 0; } } console.log('Project Statistics:'); console.log('TypeScript files:', countFiles('src', '.ts')); console.log('HTML files:', countFiles('src', '.html')); console.log('JSON files:', countFiles('src', '.json')); console.log('Total src files:', fs.readdirSync('src', {recursive: true}).filter(f => fs.statSync(path.join('src', f)).isFile()).length);\""
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.0",
+    "prettier": "^3.2.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.3.0",
+    "archiver": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "browserslist": [
+    "Chrome >= 88"
+  ],
+  "os": [
+    "win32",
+    "darwin",
+    "linux"
+  ]
+}

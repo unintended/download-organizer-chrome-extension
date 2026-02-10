@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>RegExp Download Organizer</title>
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
 
     <style>
         .tooltip-inner {
@@ -82,6 +81,14 @@
         #main-toolbar {
             margin-bottom: 10px;
         }
+
+        #newBadge {
+            display: none;
+        }
+
+        .about-heart {
+            color: #ee6c26;
+        }
     </style>
 </head>
 <body>
@@ -101,7 +108,7 @@
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
-                    <ul class="dropdown-menu" role="menu">
+                    <ul class="dropdown-menu" role="list">
                         <li><a id="add-rule-from-text-btn" data-toggle="modal" data-target="#addRuleFromTextModal" href="#">New rule from text...</a></li>
                     </ul>
                 </div>
@@ -140,7 +147,7 @@
                         Export rules
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu">
+                    <ul class="dropdown-menu" role="list">
                         <li><a id="export-rules-btn" href="#">Save to file</a></li>
                         <li><a id="sync-rules-to-cloud-btn" href="#">Sync to cloud</a></li>
                     </ul>
@@ -151,7 +158,7 @@
                         Import rules
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu">
+                    <ul class="dropdown-menu" role="list">
                         <li><a id="import-rules-btn" href="#" data-toggle="modal" data-target="#importRulesFromTextModal">Load from file...</a></li>
                         <li><a id="sync-rules-from-cloud-btn" href="#">Sync from cloud</a></li>
                     </ul>
@@ -161,9 +168,9 @@
         </div>
         <div class="col-sm-4">
             <ul id="tab-links" class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#tab-help" role="tab" data-toggle="tab">Help</a></li>
-                <li><a href="#tab-changelog" role="tab" data-toggle="tab">Changelog <span id="newBadge" class="badge" style="display:none;">New!</span></a></li>
-                <li><a href="#tab-about" role="tab" data-toggle="tab">About</a></li>
+                <li class="active" role="presentation"><a href="#tab-help" role="tab" data-toggle="tab">Help</a></li>
+                <li role="presentation"><a href="#tab-changelog" role="tab" data-toggle="tab">Changelog <span id="newBadge" class="badge">New!</span></a></li>
+                <li role="presentation"><a href="#tab-about" role="tab" data-toggle="tab">About</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab-help">
@@ -198,103 +205,83 @@
                         <dt>application/exe</dt>
                         <dd>Windows executable</dd>
                         <dt>audio/mpeg</dt>
-                        <dd>MP3 and other MPEG audio</dd>
-                        <dt>image/gif</dt>
-                        <dd>GIF images</dd>
+                        <dd>MP3 files</dd>
                         <dt>image/jpeg</dt>
                         <dd>JPEG images</dd>
                         <dt>image/png</dt>
                         <dd>PNG images</dd>
-                        <dt>video/x-msvideo</dt>
-                        <dd>AVI video</dd>
                     </dl>
 
-                    <p>There is also a more detailed <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types"
-                                                        target="_blank">list of common MIME types</a> for reference.</p>
-                    <p>Don't forget that you can always use a wildcard to match a group of filetypes (e.g. <code>image/.*</code> or <code>audio/.*</code>)</p>
+                    <h4>Examples</h4>
+                    <dl class="dl-horizontal">
+                        <dt>image/.*</dt>
+                        <dd>All images</dd>
+                        <dt>application/(zip|rar)</dt>
+                        <dd>Zip or rar archives</dd>
+                        <dt>.*</dt>
+                        <dd>Everything (catch-all)</dd>
+                    </dl>
 
-                    <h4>Destination path pattern</h4>
+                    <h4>Download path patterns</h4>
+                    <p>Download path consists of forward-slash delimited folders (e.g. <em>my folder/my
+                        subfolder/</em>).
+                        You can also specify the exact filename at the end (e.g. <em>my folder/my
+                            file.zip</em>).
+                        And you can use <em>placeholders</em> as dynamic values in the path.</p>
 
-                    <p>This part of a rule defines a destination path where the downloaded file will be stored.</p>
+                    <h4>Placeholders</h4>
+                    <dl class="dl-horizontal">
+                        <dt>${filename}</dt>
+                        <dd>Original filename</dd>
+                        <dt>${url}</dt>
+                        <dd>Full download URL (before redirects)</dd>
+                        <dt>${finalUrl}</dt>
+                        <dd>Download URL after all redirects</dd>
+                        <dt>${referrer}</dt>
+                        <dd>Referrer URL</dd>
+                        <dt>${tabUrl}</dt>
+                        <dd>Current tab URL</dd>
+                        <dt>${mime}</dt>
+                        <dd>MIME type</dd>
+                        <dt>${date}</dt>
+                        <dd>Current date (YYYY-MM-DD format) or ${date:format} for
+                            custom formats</dd>
+                    </dl>
+                    <p>For ${date} placeholder you can use a date format as a parameter. E.g.: ${date:MMM DD, YYYY} or ${date:HH:mm}. You can use any format from the moment.js library.</p>
 
-                    <p>You can access the captured groups from the matchers using special
-                        placeholders in the following format — <code>${matcher:num}</code>, where
-                        <code>matcher</code> is an id of the matcher and <code>num</code> is a number of the capturing
-                        group starting from 1. For example placeholder <code>${referrer:1}</code> will be substituted
-                        with the contents of the capturing group #1 from the <b>Referrer</b> matcher. <br/>
-                        To access a whole field use a placeholder with no index (e.g. <code>${filename}</code>).</p>
+                    <h5>Date format examples</h5>
+                    <dl class="dl-horizontal">
+                        <dt>YYYY-MM-DD</dt>
+                        <dd class="date-format-example" data-value="YYYY-MM-DD">-</dd>
+                        <dt>MM/DD/YYYY</dt>
+                        <dd class="date-format-example" data-value="MM/DD/YYYY">-</dd>
+                        <dt>MMM DD, YYYY</dt>
+                        <dd class="date-format-example" data-value="MMM DD, YYYY">-</dd>
+                        <dt>YYYY/MM</dt>
+                        <dd class="date-format-example" data-value="YYYY/MM">-</dd>
+                        <dt>HH:mm</dt>
+                        <dd class="date-format-example" data-value="HH:mm">-</dd>
+                    </dl>
 
-                    <p>There is a list of the available placeholders: <code>mime</code>, <code>url</code>, <code>finalUrl</code>, <code>referrer</code>, <code>filename</code>.
-                    </p>
-
-                    <p>The result path is forced by <b>Chrome</b> within the default download folder. You can use
-                        symbolic links to circumvent this limitation.
-                    </p>
-
-                    <h4>Name conflict action</h4>
-
-                    <p>You can choose how files with conflicting filenames are handled in one of three different ways:
-                        <ol>
-                            <li>
-                                <strong>Uniquify</strong> - if the file exists it will append "(1)" to the filename.
-                                ex. if "MyImage.jpg" exists, it will save the file as "MyImage (1).jpg" then "(2)" and
-                                so on.
-                            </li>
-                            <li>
-                                <strong>Overwrite</strong> - if the file exists it will overwrite the existing file.
-                            </li>
-                            <li>
-                                <strong>Prompt</strong> - if the file exists it will bring up the file prompt.
-                            </li>
-                        </ol>
-                    </p>
-
-                    <h4>RegExp cheatsheet</h4>
-
+                    <h4>Capturing groups</h4>
                     <p>
-                        <strong>"|"</strong> is an OR operator. E.g. <code>facebook|google</code> matches any string
-                        with either <code>facebook</code> or <code>google</code> in it.<br/>
-                        <strong>"."</strong> is a single-character wildcard. E.g. <code>a.b</code> matches
-                        <code>a-b</code>, <code>acb</code>, <code>a b</code>, etc.<br/>
-                        <strong>".*"</strong> is a multi-character wildcard (can match zero characters)<br/>
-                        <strong>".+"</strong> is a multi-character wildcard (cannot match zero characters, requires at
-                        least one character to match)<br/>
-                        <strong>"\"</strong> is used to escape special symbols. E.g. dots in
-                        <code>www\.google\.com</code> are not single-character wildcards.<br/>
-                        Capturing groups are regular expressions surrounded by round brackets <strong>"( )"</strong>.
-                        E.g. <code>www\.(.+)\.com</code> will match <b>.com</b>-domain names and store domain name
-                        without
-                        <b>"www."</b> prefix and <b>".com"</b> suffix in group <b>1</b>.<br/>
+                        If you use <i>capturing groups</i> (round brackets) in your <em>matchers</em>, you can reuse the matched groups in a <em>download path</em> by using
+                        <code>${field:1}</code>, <code>${field:2}</code>, etc. where <em>field</em> is a name of the
+                        matcher (<em>mime</em>, <em>referrer</em>, <em>url</em>, <em>finalUrl</em>, <em>tabUrl</em> or <em>filename</em>) and number is the index of the capturing group.
                     </p>
 
-                    <p>More info about regular expressions:
-                        <a href="http://en.wikipedia.org/wiki/Regular_expression" target="_blank">Wikipedia</a>,
-                        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp"
-                            target="_blank">Mozilla Developer Network</a>
-                    </p>
+                    <h4>Examples</h4>
+                    <dl class="dl-horizontal">
+                        <dt>images/</dt>
+                        <dd>Put all downloads to 'images' folder. Original filename will be appended automatically.</dd>
+                        <dt>images/${filename}</dt>
+                        <dd>Put all downloads to 'images' folder. Same as above.</dd>
+                        <dt>downloads/${date:YYYY}/${date:MM}/</dt>
+                        <dd>Organize stuff by year and month.</dd>
+                        <dt>${referrer:1}/</dt>
+                        <dd>Create a folder based on the first capturing group of referrer pattern (e.g. domain name).</dd>
+                    </dl>
 
-                    <h4>Date formatter</h4>
-                    <p>
-                        You can add a special <code>date</code> placeholder into destination path to organize downloads by date and/or time.
-                        There are some most useful examples:
-                        <ul>
-                            <li><code>${date}</code> → <code id="date-example-date" class="date-format-example" data-value="YYYY-MM-DD">2018-11-18</code></li>
-                            <li><code>${date:YYYY}</code> → <code id="date-example-year" class="date-format-example" data-value="YYYY">2018</code></li>
-                            <li><code>${date:YYYY, MMMM}</code> → <code id="date-example-year-monthname" class="date-format-example" data-value="YYYY, MMMM">2018, November</code></li>
-                            <li><code>${date:YYYY.MM.DD}</code> → <code id="date-example-year-month-day" class="date-format-example" data-value="YYYY.MM.DD">2018.11.18</code></li>
-                            <li><code>${date:YYYY.MM.DD_HH-mm-ss}</code> → <code id="date-example-date-with-time" class="date-format-example" data-value="YYYY.MM.DD_HH-mm-ss">2018.11.18_16-38-08</code></li>
-                        </ul>
-                    </p>
-
-                    <p>More info about date formatters in <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank">moment.js documentation</a>.</p>
-
-                    <h4>Overriding file extensions</h4>
-                    <p>
-                        It's not possible to override extensions for known MIME-types because of the Chrome API limitations.
-                        However, as a workaround you can use 3rd-party extensions to modify the response headers for the urls you download,
-                        changing the <code>Content-Type</code> header to some unexpected MIME-type, e.g. <code>application/x-unknown-mime-type</code>.
-                        Then you will be able to create a rule with a custom file extension in <b>destination path</b>.
-                    </p>
                 </div>
                 <div class="tab-pane" id="tab-changelog">
                     <h4>Version 0.5.1</h4>
@@ -362,12 +349,12 @@
                     </ul>
                 </div>
                 <div class="tab-pane" id="tab-about">
-                    <h5><span style="color:#ee6c26;">♥</span> Made with love to humans by robots~</h5>
+                    <h5><span class="about-heart">♥</span> Made with love to humans by robots~</h5>
                     <p>Feel free to report any issues and feature requests or to join the development via our GitHub page</p>
                     <ul>
-                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension/issues" target="_blank">Issue tracker</a></li>
-                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension" target="_blank">GitHub repository</a></li>
-                        <li><a href="https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg" target="_blank">Chrome web store (for likes)</a></li>
+                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension/issues" target="_blank" rel="noopener noreferrer">Issue tracker</a></li>
+                        <li><a href="https://github.com/unintended/download-organizer-chrome-extension" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
+                        <li><a href="https://chrome.google.com/webstore/detail/regexp-download-organizer/oamembonjndgangicfphlckkdmagpjlg" target="_blank" rel="noopener noreferrer">Chrome web store (for likes)</a></li>
                         <li><a href="LICENSE" target="_blank">License</a></li>
                     </ul>
                 </div>
@@ -448,9 +435,9 @@
 </div>
 
 
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="options.js" type="module"></script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/bootstrap.min.js"></script>
+<script type="module" src="scripts/options.js"></script>
 
 <script type="text/html" id="error-alert-template">
     <div class="alert alert-danger">
