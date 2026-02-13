@@ -1,3 +1,5 @@
 .idea/
 *.iml
 key.pem
+tests/test-unicode-fix.ps1
+tests/
