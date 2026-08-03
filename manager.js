@@ -137,7 +137,7 @@ chrome.downloads.onDeterminingFilename.addListener( function (downloadItem, sugg
         const item = {
             'mime': downloadItem.mime,
             'referrer': decodeURI(downloadItem.referrer),
-            'tabUrl': tabUrl,
+            'tabUrl': tabUrl ? decodeURI(tabUrl) : tabUrl,
             'url': decodeURI(downloadItem.url),
             'finalUrl': decodeURI(downloadItem.finalUrl),
             'filename': normalizeFilename(downloadItem.filename), // Unicode normalization fix
